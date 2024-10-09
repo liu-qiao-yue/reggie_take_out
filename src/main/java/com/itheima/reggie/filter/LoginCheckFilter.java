@@ -3,6 +3,7 @@ package com.itheima.reggie.filter;
 import com.alibaba.fastjson.JSON;
 import com.itheima.reggie.common.R;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.*;
@@ -25,6 +26,11 @@ public class LoginCheckFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+        //方便与postman测试
+        if (StringUtils.equals(request.getHeader("key"), "postman")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         //1. 获取本次请求的URL
         String requestURI = request.getRequestURI();
         //2. 判断本次请求是否需要处理 -> 检查登录状态
