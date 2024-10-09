@@ -70,10 +70,27 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.23</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>4.1.1.RELEASE</version>
+        </dependency>
+        <!-- @Builder -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version> <!-- 使用最新的版本 -->
+            <scope>provided</scope>
+        </dependency>
+        <!-- Aspect引入 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>
     <!--       Maven的构建配置段落，用于配置构建过程中使用的插件，这个插件是Spring Boot项目的关键组成部分，确保项目可以正常构建和运行-->

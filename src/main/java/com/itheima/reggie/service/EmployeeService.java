@@ -13,5 +13,11 @@ public interface EmployeeService extends IService<Employee> {
 
     R<Object> logout(HttpServletRequest request);
 
-    R<Object> employeePageList();
+    R<Object> employeePageList(Integer page, Integer pageSize, String name);
+
+    R<Object> addEmployee(HttpServletRequest request, Employee employee);
+
+    R<Object> editEmployee(String id);
+
+    R<Object> updateEmployee( Employee employee);
 }

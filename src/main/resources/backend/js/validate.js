@@ -54,7 +54,7 @@ function validID (rule,value,callback) {
   let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
   if(value == '') {
     callback(new Error('请输入身份证号码'))
-  } else if (reg.test(value)) {
+  } else if (reg.test(value) || /^[*]+$/.test(value)) {
     callback()
   } else {
     callback(new Error('身份证号码不正确'))

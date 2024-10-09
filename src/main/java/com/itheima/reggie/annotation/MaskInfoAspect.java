@@ -1,0 +1,155 @@
+package com.itheima.reggie.annotation;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.itheima.reggie.common.R;
+import com.itheima.reggie.exception.MaskException;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.util.*;
+
+@Aspect
+@Component
+public class MaskInfoAspect {
+
+    @Pointcut("execution(* com.itheima.reggie.controller..*.*(..))")
+    public void controllerMethods() {
+    }
+
+    @Around("controllerMethods()")
+    public Object maskFields(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object result = joinPoint.proceed(); // 执行原方法
+        return maskData(result); // 对返回的结果进行掩码处理
+    }
+
+    private Object maskData(Object obj) {
+        if (obj == null) {
+            return obj;
+        }
+
+        if (obj instanceof R) {
+            R<?> r = (R<?>) obj;
+            Object data = r.getData();
+            maskData(data);
+            try {
+                Field dataField = r.getClass().getDeclaredField("data");
+                dataField.setAccessible(true);// NOSONAR
+                dataField.set(r, data);// NOSONAR
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new MaskException(e.getMessage());
+            }
+            return r;
+        }
+
+        if (obj instanceof Page) {
+            return maskPage((Page<?>) obj);
+        }
+
+        if (obj instanceof Map) {
+            return maskMap((Map<?, ?>) obj);
+        } else if (obj instanceof Collection) {
+            return maskCollection((Collection<?>) obj);
+        } else if (obj.getClass().isArray()) {
+            return maskArray(obj);
+        } else {
+            maskFields(obj);
+            return obj;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> Page<T> maskPage(Page<T> page) {
+        List<T> records = page.getRecords();
+        if (records != null) {
+            List<T> maskedRecords = new ArrayList<>(records.size());
+            for (T record : records) {
+                maskedRecords.add((T) maskData(record));
+            }
+            page.setRecords(maskedRecords);
+        }
+        return page;
+    }
+
+    private void maskFields(Object obj) {
+        Class<?> clazz = obj.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(MaskInfo.class)) {
+                field.setAccessible(true); // 设置私有字段可访问
+                try {
+                    Object value = field.get(obj);
+                    if (value instanceof String) {
+                        String maskedValue = maskString((String) value);
+                        field.set(obj, maskedValue);
+                    } else if (value != null && !isBasicTypeOrWrapper(value)) {
+                        // 如果字段是一个对象，则递归处理
+                        maskData(value); // 递归处理非字符串类型的值
+                    }
+                } catch (IllegalAccessException e) {
+                    throw new MaskException(e.getMessage());
+                }
+            }
+        }
+    }
+
+    private boolean isBasicTypeOrWrapper(Object value) {
+        return value instanceof Integer ||
+                value instanceof Long ||
+                value instanceof Short ||
+                value instanceof Byte ||
+                value instanceof Double ||
+                value instanceof Float ||
+                value instanceof Boolean ||
+                value instanceof Character ||
+                value instanceof String;
+    }
+
+    private Object maskMap(Map<?, ?> map) {
+        Map<Object, Object> newMap = new HashMap<>(map.size());
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            Object key = entry.getKey();
+            Object value = entry.getValue();
+            maskData(value);
+            newMap.put(key, value);
+        }
+        return newMap;
+    }
+
+    private Object maskCollection(Collection<?> collection) {
+        Collection<Object> newList = new ArrayList<>(collection.size());
+        for (Object item : collection) {
+            maskData(item);
+            newList.add(item);
+        }
+        return newList;
+    }
+
+    private Object maskArray(Object array) {
+        Object newArray = Array.newInstance(array.getClass().getComponentType(), Array.getLength(array));
+        int length = Array.getLength(array);
+        for (int i = 0; i < length; i++) {
+            Object item = Array.get(array, i);
+            maskData(item);
+            Array.set(newArray, i, item);
+        }
+        return newArray;
+    }
+
+    private String maskString(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        int length = str.length();
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append('*');
+        }
+        return sb.toString();
+    }
+}

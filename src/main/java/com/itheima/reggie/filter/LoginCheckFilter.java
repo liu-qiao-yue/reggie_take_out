@@ -1,5 +1,7 @@
 package com.itheima.reggie.filter;
 
+import com.alibaba.fastjson.JSON;
+import com.itheima.reggie.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
 
@@ -47,10 +49,8 @@ public class LoginCheckFilter implements Filter {
             return;
         }
 
-        //5.如果未登录则返回登录结果，通过输出流方向
-
-        log.info("there is a filter about {}", request.getRequestURI());
-        filterChain.doFilter(request, response);
+        //5.如果未登录则返回登录结果，通过输出流方式向客户端页面响应数据
+        response.getWriter().write(JSON.toJSONString(R.error("NOTLOGIN")));
     }
 
     /**

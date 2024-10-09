@@ -32,7 +32,6 @@ public class EmployeeController {
     /**
      * 员工退出登录
      * @param request 删除session员工信息
-     * @param employee 员工信息
      * @return
      */
     @PostMapping("/logout")
@@ -40,9 +39,42 @@ public class EmployeeController {
         return employeeService.logout(request);
     }
 
+    /**
+     * 新增员工
+     * @param employee 员工信息
+     * @return
+     */
+    @PostMapping
+    public R<Object> addEmployee(HttpServletRequest request,
+                                 @RequestBody Employee employee){
+        return employeeService.addEmployee(request, employee);
+    }
 
+    /**
+     * 员工页面list
+     * @param page 第几页
+     * @param pageSize 每页几行
+     * @return
+     */
     @GetMapping("/page")
-    public R<Object> employeePageList(){
-        return employeeService.employeePageList();
+    public R<Object> employeePageList(@RequestParam("page") Integer page,
+                                      @RequestParam("pageSize") Integer pageSize,
+                                      @RequestParam(value = "name", required = false)String name){
+        return employeeService.employeePageList(page, pageSize, name);
+    }
+
+    /**
+     * 编辑员工信息
+     * @param id
+     * @return
+     */
+    @GetMapping("{id}")
+    public R<Object> editEmployee(@PathVariable String id){
+        return employeeService.editEmployee(id);
+    }
+
+    @PutMapping
+    public R<Object> updateEmployee(@RequestBody Employee employee){
+        return employeeService.updateEmployee(employee);
     }
 }
