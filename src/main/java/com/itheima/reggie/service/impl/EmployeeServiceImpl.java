@@ -2,7 +2,6 @@ package com.itheima.reggie.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -74,10 +74,14 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
      */
     @Override
     public R<Object> employeePageList(Integer page, Integer pageSize, String name) {
+        //分页构造器
         Page<Employee> employeePage = new Page<>(page, pageSize);
+        //构造条件构造器
         LambdaQueryWrapper<Employee> wrapper = Wrappers.lambdaQuery();
-        if (StringUtils.isNotBlank(name))
-            wrapper.like(Employee::getName, name);
+        //添加过滤条件
+        wrapper.like(StringUtils.isNotBlank(name),Employee::getName, name);
+        wrapper.orderByDesc(Employee::getUpdateTime);
+        //执行查询
         this.baseMapper.selectPage(employeePage, wrapper);
         return R.success(employeePage);
     }
@@ -101,6 +105,8 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         employee.setPassword(PasswordUtil.encodePassword("123456"));
         employee.setCreateUser(userId);
         employee.setUpdateUser(userId);
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
         return R.success(this.save(employee));
     }
 
@@ -127,27 +133,22 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
      */
     @Override
     public R<Object> updateEmployee(HttpServletRequest request, Employee employee) {
-        LambdaUpdateWrapper<Employee> updateWrapper = Wrappers.lambdaUpdate();
-        if (StringUtils.isNotBlank(employee.getIdNumber())) {//编辑更新
-            updateWrapper
-                    //用户账号
-                    .set(Employee::getUsername, employee.getUsername())
-                    //姓名
-                    .set(Employee::getName, employee.getName())
-                    //手机号
-                    .set(Employee::getPhone, employee.getPhone())
-                    //性别
-                    .set(Employee::getSex, employee.getSex());
-            if (!employee.getIdNumber().contains("*"))
-                //身份证
-                updateWrapper.set(Employee::getIdNumber, employee.getIdNumber());
-        } else {//启用或禁用
-            updateWrapper.set(Employee::getStatus, employee.getStatus());
-        }
-        //更新时间
-        updateWrapper.set(Employee::getUpdateUser, ((Employee) request.getSession().getAttribute(SESSION_KEY)).getId());
-        updateWrapper.eq(Employee::getId, employee.getId());
-        if (!this.update(updateWrapper))
+        Employee.EmployeeBuilder em = Employee.builder()
+                .id(employee.getId())
+                .sex(employee.getSex())
+                .name(employee.getName())
+                .username(employee.getUsername())
+                .status(employee.getStatus())
+                .updateUser(((Employee) request.getSession().getAttribute(SESSION_KEY)).getId())
+                .updateTime(LocalDateTime.now());
+
+        if (StringUtils.isNotBlank(employee.getIdNumber())
+                && !employee.getIdNumber().contains("*"))
+            //身份证
+            em.idNumber(employee.getIdNumber());
+
+        //updateById时
+        if (!this.updateById(em.build()))
             throw new BizException(BizExceptionEnum.UPDATE_ERROR);
         return R.success("update success.");
     }

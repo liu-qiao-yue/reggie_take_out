@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 public class BizException extends RuntimeException {
 
-    private Integer code; //业务异常码
-    private String msg; //业务异常信息
+    private final Integer code; //业务异常码
+    private final String msg; //业务异常信息
     public BizException(Integer code, String message) {
         super(message);
         this.code = code;

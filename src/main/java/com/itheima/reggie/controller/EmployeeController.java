@@ -15,7 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 public class EmployeeController {
 
     @Autowired
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 
     /**
      * 员工登录

@@ -40,11 +40,9 @@ public class Employee implements Serializable {
 
     private Integer status;
 
-    @Builder.Default
-    private LocalDateTime createTime = LocalDateTime.now();
+    private LocalDateTime createTime;
 
-    @Builder.Default
-    private LocalDateTime updateTime = LocalDateTime.now();
+    private LocalDateTime updateTime;
 
     @TableField(fill = FieldFill.INSERT)
     private Long createUser;
