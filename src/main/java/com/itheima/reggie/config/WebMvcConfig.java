@@ -14,11 +14,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+/**
+ * 配置类，用于配置Web应用程序的资源路径映射、消息转换器和ObjectMapper。
+ */
 @Slf4j
-//@EnableWebMvc
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    /**
+     * 此方法用于配置静态资源路径映射。
+     * 配置静态资源路径映射，包括后端和前端的资源路径。
+     * @param registry
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         log.info("WebMvcConfig is working");

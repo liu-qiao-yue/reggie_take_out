@@ -33,6 +33,21 @@ public class R<T> {
         return r;
     }
 
+    public static <T> R<T> error(Integer code, String msg) {
+        R r = new R();
+        r.msg = msg;
+        r.code = code;
+        return r;
+    }
+
+    public static <T> R<T> error(Integer code, String msg, Map map) {
+        R r = new R();
+        r.msg = msg;
+        r.code = code;
+        r.map = map;
+        return r;
+    }
+
     public R<T> add(String key, Object value) {
         this.map.put(key, value);
         return this;

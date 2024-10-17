@@ -74,7 +74,7 @@ public class EmployeeController {
     }
 
     @PutMapping
-    public R<Object> updateEmployee(@RequestBody Employee employee){
-        return employeeService.updateEmployee(employee);
+    public R<Object> updateEmployee(HttpServletRequest request, @RequestBody Employee employee){
+        return employeeService.updateEmployee(request, employee);
     }
 }

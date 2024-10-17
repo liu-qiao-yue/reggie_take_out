@@ -19,5 +19,5 @@ public interface EmployeeService extends IService<Employee> {
 
     R<Object> editEmployee(String id);
 
-    R<Object> updateEmployee( Employee employee);
+    R<Object> updateEmployee(HttpServletRequest request, Employee employee);
 }

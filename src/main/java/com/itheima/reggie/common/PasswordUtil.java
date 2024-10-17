@@ -3,6 +3,9 @@ package com.itheima.reggie.common;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * 密码工具类
+ */
 public class PasswordUtil {
 
     private PasswordUtil(){

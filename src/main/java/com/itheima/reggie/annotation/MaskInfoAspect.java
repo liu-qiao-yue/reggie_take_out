@@ -13,20 +13,30 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.*;
 
-@Aspect
-@Component
+/**
+ * 掩码切面，用于对返回的数据进行掩码处理，避免敏感信息泄露
+ */
+@Aspect // 定义切面
+@Component // 将切面注册为Spring bean
 public class MaskInfoAspect {
 
+    // 定义切点
     @Pointcut("execution(* com.itheima.reggie.controller..*.*(..))")
     public void controllerMethods() {
     }
 
+    // 定义around通知
     @Around("controllerMethods()")
     public Object maskFields(ProceedingJoinPoint joinPoint) throws Throwable {
         Object result = joinPoint.proceed(); // 执行原方法
         return maskData(result); // 对返回的结果进行掩码处理
     }
 
+    /**
+     * 对返回的数据进行掩码处理
+     * @param obj
+     * @return
+     */
     private Object maskData(Object obj) {
         if (obj == null) {
             return obj;

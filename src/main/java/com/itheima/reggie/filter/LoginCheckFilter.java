@@ -16,12 +16,20 @@ import java.io.IOException;
  * 检查用户是否已经完成登录
  */
 @Slf4j
-@WebFilter(filterName = "loginCheckFilter", urlPatterns = "/*")
+@WebFilter(filterName = "loginCheckFilter", urlPatterns = "/*") // 过滤器,拦截所有请求，filterName为过滤器名称
 public class LoginCheckFilter implements Filter {
 
     //路径匹配器
     public static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
 
+    /**
+     * 检查用户是否已经完成登录
+     * @param servletRequest
+     * @param servletResponse
+     * @param filterChain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -60,7 +68,7 @@ public class LoginCheckFilter implements Filter {
     }
 
     /**
-     *
+     * 判断本次url是否在urls里面
      * @param requestURI
      * @param urls
      * @return
