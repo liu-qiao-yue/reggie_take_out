@@ -30,7 +30,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
      *
      * @param request  登录成功后存放员工信息
      * @param employee 用户名&密码
-     * @return
+     * @return R
      */
     @Override
     public R<Employee> login(HttpServletRequest request, Employee employee) {
@@ -55,8 +55,8 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     /**
      * 退出登录 -> 清除session
-     * @param request
-     * @return
+     * @param request HttpServletRequest
+     * @return R
      */
     @Override
     public R<Object> logout(HttpServletRequest request) {
@@ -67,10 +67,10 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     /**
      * 分页查询员工信息
-     * @param page
-     * @param pageSize
-     * @param name
-     * @return
+     * @param page 当前页
+     * @param pageSize 每页多少行
+     * @param name 名称
+     * @return R
      */
     @Override
     public R<Object> employeePageList(Integer page, Integer pageSize, String name) {
@@ -88,9 +88,9 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     /**
      * 新增员工
-     * @param request
-     * @param employee
-     * @return
+     * @param request HttpServletRequest
+     * @param employee 员工信息
+     * @return R
      */
     @Override
     public R<Object> addEmployee(HttpServletRequest request, Employee employee) {
@@ -112,8 +112,8 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     /**
      * 编辑员工信息
-     * @param id
-     * @return
+     * @param id 员工ID
+     * @return R
      */
     @Override
     public R<Object> editEmployee(String id) {
@@ -127,9 +127,9 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     /**
      * 更新员工信息
-     * @param request
-     * @param employee
-     * @return
+     * @param request HttpServletRequest
+     * @param employee HttpServletRequest
+     * @return R
      */
     @Override
     public R<Object> updateEmployee(HttpServletRequest request, Employee employee) {
