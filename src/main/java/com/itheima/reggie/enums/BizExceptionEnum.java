@@ -12,7 +12,10 @@ public enum BizExceptionEnum {
     UPDATE_ERROR(100003, "update error."),
     //员工模块
     USERNAME_IS_EXIST(210001, "The username is exist."),
-    EMPLOYEE_NOT_FIND(210002, "The employee does not find.");
+    EMPLOYEE_NOT_FIND(210002, "The employee does not find."),
+
+    CATEGORY_IS_EXIST(220001, "The category is exist."),
+    CATEGORY_IS_RELATED(220002, "This category has related dishes or set menus and cannot be deleted");
 
 
 

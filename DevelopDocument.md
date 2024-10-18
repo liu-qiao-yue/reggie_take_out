@@ -26,27 +26,27 @@
   > POST
 - 请求参数
 
-> | 参数名      | 是否必须 | 类型   | 说明       |
-> | :----------|:-------|:-----|:---------|
-> | username | 是      | String | 员工账号   |
-> | password | 是      | String | 员工密码 |
+| 参数名      | 是否必须 | 类型     | 说明   |
+|:---------|:-----|:-------|:-----|
+| username | 是    | String | 员工账号 |
+| password | 是    | String | 员工密码 |
 
 - 返回参数
 
-> | 参数名        | 类型  | 说明      |
-> |:-----------|:----|:--------|
-> | id         | 是   | Long    | 员工ID |
-> | username   | 是   | String  | 员工账号 |
-> | name       | 是   | String  | 员工姓名 |
-> | password   | 是   | String  | 密码     |
-> | phone      | 是   | String  | 手机号   |
-> | sex        | 是   | String  | 性别     |
-> | idNumber   | 是   | String  | 身份证号 |
-> | status     | 是   | Integer | 状态(0:禁用，1:启用) |
-> | createTime | 是   | Date    | 创建时间 |
-> | updateTime | 是   | Date    | 更新时间 |
-> | createUser | 是   | Long    | 创建人   |
-> | updateUser | 是   | Long    | 更新人   |
+| 参数名        | 类型  | 说明      |
+|:-----------|:----|:--------|
+| id         | 是   | Long    | 员工ID |
+| username   | 是   | String  | 员工账号 |
+| name       | 是   | String  | 员工姓名 |
+| password   | 是   | String  | 密码     |
+| phone      | 是   | String  | 手机号   |
+| sex        | 是   | String  | 性别     |
+| idNumber   | 是   | String  | 身份证号 |
+| status     | 是   | Integer | 状态(0:禁用，1:启用) |
+| createTime | 是   | Date    | 创建时间 |
+| updateTime | 是   | Date    | 更新时间 |
+| createUser | 是   | Long    | 创建人   |
+| updateUser | 是   | Long    | 更新人   |
 
 - 示例
     - request:
@@ -146,28 +146,31 @@
 - method
   > GET
 - 请求参数
-    > | 参数名 | 是否必须 | 类型   | 说明       |
-    > |:------|:-------|:-----|:---------|
-    > | name | 否      | String | 员工姓名 |
-    > | page | 是      | Integer | 当前页码 |
-    > | pageSize | 是      | Integer | 每页显示条数 |
+
+| 参数名      | 是否必须 | 类型      | 说明     |
+|:---------|:-----|:--------|:-------|
+| name     | 否    | String  | 员工姓名   |
+| page     | 是    | Integer | 当前页码   |
+| pageSize | 是    | Integer | 每页显示条数 |
+
 - 返回参数
-    > | 参数名 | 类型  | 说明      |
-    > |:------|:----|:------|
-    > | total | Integer | 总记录数 |
-    > | pages | Integer | 总页数 |
-    > | records:Employee.id | Long | id |
-    > | records:Employee.username | String | 用户名 |
-    > | records:Employee.sex | String | 性别 |
-    > | records:Employee.status | Integer | 状态 |
-    > | records:Employee.createTime | Date | 创建时间 |
-    > | records:Employee.updateTime | Date | 更新时间 |
-    > | records:Employee.createUser | Long | 创建人 |
-    > | records:Employee.updateUser | Long | 更新人 |
-    > | records:Employee.name | String | 员工姓名 |
-    > | records:Employee.idNumber | String | 身份证号 |
-    > | records:Employee.phone | String | 手机号 |
-    > | records:Employee.password | String | 密码 |
+
+| 参数名                         | 类型      | 说明   |
+|:----------------------------|:--------|:-----|
+| total                       | Integer | 总记录数 |
+| pages                       | Integer | 总页数  |
+| records:Employee.id         | Long    | id   |
+| records:Employee.username   | String  | 用户名  |
+| records:Employee.sex        | String  | 性别   |
+| records:Employee.status     | Integer | 状态   |
+| records:Employee.createTime | Date    | 创建时间 |
+| records:Employee.updateTime | Date    | 更新时间 |
+| records:Employee.createUser | Long    | 创建人  |
+| records:Employee.updateUser | Long    | 更新人  |
+| records:Employee.name       | String  | 员工姓名 |
+| records:Employee.idNumber   | String  | 身份证号 |
+| records:Employee.phone      | String  | 手机号  |
+| records:Employee.password   | String  | 密码   |
 - 示例
   - response:
       > ```json
@@ -212,17 +215,19 @@
 - method
   > PUT
 - 请求参数
-  > | 参数名 | 是否必须 | 类型 | 说明 |
-  > |:------|:-------|:----|:----|
-  > | id | 是 | Long | 员工ID |
-  > | status | 是 | Integer | 状态(0:禁用，1:启用) |
+
+| 参数名    | 是否必须 | 类型      | 说明            |
+|:-------|:-----|:--------|:--------------|
+| id     | 是    | Long    | 员工ID          |
+| status | 是    | Integer | 状态(0:禁用，1:启用) |
 - 返回参数
-  > | 参数名 | 类型  | 说明      |
-  > |:------|:----|:------|
-  > | code | Integer | 返回标识符(0:成功,1:失败) |
-  > | msg | String | 返回信息 |
-  > | data | String | 返回数据 |
-  > | map | Map | 返回补充数据 |
+
+| 参数名  | 类型      | 说明               |
+|:-----|:--------|:-----------------|
+| code | Integer | 返回标识符(0:成功,1:失败) |
+| msg  | String  | 返回信息             |
+| data | String  | 返回数据             |
+| map  | Map     | 返回补充数据           |
 - 示例
   - request:
   > ```json
@@ -247,24 +252,26 @@
 - method
   > GET
 - 请求参数
-  > | 参数名 | 是否必须 | 类型 | 说明 |
-  > |:------|:-------|:----|:----|
-  > | id | 是 | Long | 员工ID |
+
+| 参数名 | 是否必须 | 类型   | 说明   |
+|:----|:-----|:-----|:-----|
+| id  | 是    | Long | 员工ID |
 - 返回参数
-  > | 参数名 | 类型  | 说明      |
-  > |:------|:----|:------|
-  > | Employee.id | Long | id |
-  > | Employee.username | String | 用户名 |
-  > | Employee.name | String | 员工姓名 |
-  > | Employee.password | String | 密码 |
-  > | Employee.phone | String | 手机号 |
-  > | Employee.sex | String | 性别 |
-  > | Employee.idNumber | String | 身份证号 |
-  > | Employee.status | Integer | 状态(0:禁用，1:启用) |
-  > | Employee.createTime | Date | 创建时间 |
-  > | Employee.updateTime | Date | 更新时间 |
-  > | Employee.createUser | Long | 创建人 |
-  > | Employee.updateUser | Long | 更新人 |
+
+| 参数名                 | 类型      | 说明            |
+|:--------------------|:--------|:--------------|
+| Employee.id         | Long    | id            |
+| Employee.username   | String  | 用户名           |
+| Employee.name       | String  | 员工姓名          |
+| Employee.password   | String  | 密码            |
+| Employee.phone      | String  | 手机号           |
+| Employee.sex        | String  | 性别            |
+| Employee.idNumber   | String  | 身份证号          |
+| Employee.status     | Integer | 状态(0:禁用，1:启用) |
+| Employee.createTime | Date    | 创建时间          |
+| Employee.updateTime | Date    | 更新时间          |
+| Employee.createUser | Long    | 创建人           |
+| Employee.updateUser | Long    | 更新人           |
 - 示例
   - response:
   > ```json
@@ -296,12 +303,21 @@
 - method
   > POST
 - 请求参数
-  > | 参数名 | 是否必须 | 类型 | 说明 |
-  > |:------|:-------|:----|:----|
-  > | name | 是 | String | 分类名称 |
-  > | type | 是 | Integer | 分类类型(1:菜品分类，2:套餐分类) |
-  > | sort | 是 | Integer | 排序 |
+
+| 参数名  | 是否必须 | 类型      | 说明                  |
+|:-----|:-----|:--------|:--------------------|
+| name | 是    | String  | 分类名称                |
+| type | 是    | Integer | 分类类型(1:菜品分类，2:套餐分类) |
+| sort | 是    | Integer | 排序                  |
 - 返回参数
+
+| 参数名  | 类型      | 说明               |
+|:-----|:--------|:-----------------|
+| code | Integer | 返回标识符(0:成功,1:失败) |
+| msg  | String  | 返回信息             |
+| data | String  | 返回数据             |
+| map  | Map     | 返回补充数据           |
+
 - 示例
   - request:
   > ```json
@@ -312,9 +328,102 @@
   >  }
   >```
   - response:
+  > ```json
+  > {
+  >     "code": 1,
+  >     "msg": null,
+  >     "data": true,
+  >     "map": {}
+  > }
+  >```
 
 #### 分类管理列表
+- AIP
+  > /category/page
+- method
+  > GET
+- 请求参数
 
+| 参数名      | 是否必须 | 类型      |
+|:---------|:-----|:--------|
+| page     | 是    | Integer |
+| pageSize | 是    | Integer |
+- 返回参数
+
+| 参数名  | 类型      | 说明               |
+|:-----|:--------|:-----------------|
+| code | Integer | 返回标识符(0:成功,1:失败) |
+| msg  | String  | 返回信息             |
+| data | Object  | 返回数据             |
+| map  | Map     | 返回补充数据           |
+
+- 示例
+  - response:
+
+#### 修改菜品分类
+- AIP
+  > /category
+- method
+  > PUT
+- 请求参数
+
+| 参数名  | 是否必须 | 类型      | 说明                  |
+|:-----|:-----|:--------|:--------------------|
+| id   | 是    | Long    | 分类ID                |
+| name | 是    | String  | 分类名称                |
+| sort | 是    | Integer | 排序                  |
+
+- 返回参数
+
+| 参数名  | 类型      | 说明               |
+|:-----|:--------|:-----------------|
+| code | Integer | 返回标识符(0:成功,1:失败) |
+| msg  | String  | 返回信息             |
+| data | String  | 返回数据             |
+| map  | Map     | 返回补充数据           |
+
+- 示例
+  - request:
+  > ```json
+  >  {
+  >      "name": "2121",
+  >      "id": "1847196037989793794",
+  >      "sort": "2"
+  >  }
+  >```
+  - response:
+  > ```json
+  > {
+  >     "code": 1,
+  >     "msg": null,
+  >     "data": true,
+  >     "map": {}
+  > }
+  >```
+#### 删除菜品分类
+- AIP
+  > /category/{id}
+- method
+  > DELETE
+- 返回参数
+
+| 参数名  | 类型      | 说明               |
+|:-----|:--------|:-----------------|
+| code | Integer | 返回标识符(0:成功,1:失败) |
+| msg  | String  | 返回信息             |
+| data | String  | 返回数据             |
+| map  | Map     | 返回补充数据           |
+
+- 示例
+  - response:
+  > ```json
+  > {
+  >     "code": 1,
+  >     "msg": null,
+  >     "data": true,
+  >     "map": {}
+  > }
+  >```
 ### 菜单管理
 
 ### 套餐管理

@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class PasswordUtil {
 
-    private PasswordUtil(){
+    PasswordUtil(){
         throw new IllegalStateException("Utility class");
     }
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
