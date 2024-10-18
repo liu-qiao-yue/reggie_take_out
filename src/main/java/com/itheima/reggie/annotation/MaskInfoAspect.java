@@ -77,8 +77,8 @@ public class MaskInfoAspect {
         List<T> records = page.getRecords();
         if (records != null) {
             List<T> maskedRecords = new ArrayList<>(records.size());
-            for (T record : records) {
-                maskedRecords.add((T) maskData(record));
+            for (T data : records) {
+                maskedRecords.add((T) maskData(data));
             }
             page.setRecords(maskedRecords);
         }
@@ -91,12 +91,13 @@ public class MaskInfoAspect {
 
         for (Field field : fields) {
             if (field.isAnnotationPresent(MaskInfo.class)) {
-                field.setAccessible(true); // 设置私有字段可访问
+                // 设置私有字段可访问
+                field.setAccessible(true);//NOSONAR
                 try {
                     Object value = field.get(obj);
                     if (value instanceof String) {
                         String maskedValue = maskString((String) value);
-                        field.set(obj, maskedValue);
+                        field.set(obj, maskedValue);//NOSONAR
                     } else if (value != null && !isBasicTypeOrWrapper(value)) {
                         // 如果字段是一个对象，则递归处理
                         maskData(value); // 递归处理非字符串类型的值

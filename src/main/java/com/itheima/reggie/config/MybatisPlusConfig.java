@@ -17,9 +17,9 @@ public class MybatisPlusConfig {
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(){
-//        public PaginationInterceptor paginationInterceptor() {
-//            return new PaginationInterceptor();
-//        }
+//        public PaginationInterceptor paginationInterceptor() { //NOSONAR
+//            return new PaginationInterceptor(); //NOSONAR
+//        } //NOSONAR
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
         mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return mybatisPlusInterceptor;

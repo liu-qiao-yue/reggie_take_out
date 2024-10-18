@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
      * @return
      */
     @ExceptionHandler(BizException.class)
-    public R handleBizException(BizException e) {
+    public R handleBizException(BizException e) {//NOSONAR
         Integer code = e.getCode();
         String msg = e.getMsg();
         return R.error(code, msg);

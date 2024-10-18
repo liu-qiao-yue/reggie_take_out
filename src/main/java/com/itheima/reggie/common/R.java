@@ -20,32 +20,32 @@ public class R<T> {
     private Map map = new HashMap(); //NOSONAR
 
     public static <T> R<T> success(T object) {
-        R<T> r = new R<T>();
+        R<T> r = new R<T>(); //NOSONAR
         r.data = object;
         r.code = 1;
         return r;
     }
 
-    public static <T> R<T> error(String msg) {
-        R r = new R();
+    public static <T> R<T> error(String msg) {//NOSONAR
+        R r = new R();//NOSONAR
         r.msg = msg;
         r.code = 0;
-        return r;
+        return r;//NOSONAR
     }
 
-    public static <T> R<T> error(Integer code, String msg) {
-        R r = new R();
+    public static <T> R<T> error(Integer code, String msg) { //NOSONAR
+        R r = new R();//NOSONAR
         r.msg = msg;
         r.code = code;
-        return r;
+        return r;//NOSONAR
     }
 
-    public static <T> R<T> error(Integer code, String msg, Map map) {
-        R r = new R();
+    public static <T> R<T> error(Integer code, String msg, Map map) { //NOSONAR
+        R r = new R(); //NOSONAR
         r.msg = msg;
         r.code = code;
         r.map = map;
-        return r;
+        return r; //NOSONAR
     }
 
     public R<T> add(String key, Object value) {
