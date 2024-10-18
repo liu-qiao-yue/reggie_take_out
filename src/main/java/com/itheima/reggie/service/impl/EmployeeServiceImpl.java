@@ -17,7 +17,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -49,7 +48,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
             throw new BizException(BizExceptionEnum.ACCOUNT_FORBIDDEN);
 
         //存入session
-        request.getSession().setAttribute(SESSION_KEY, emp);
+        request.getSession().setAttribute(SESSION_KEY, emp.getId());
         return R.success(emp);
     }
 
@@ -88,25 +87,19 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     /**
      * 新增员工
-     * @param request HttpServletRequest
      * @param employee 员工信息
      * @return R
      */
     @Override
-    public R<Object> addEmployee(HttpServletRequest request, Employee employee) {
+    public R<Object> addEmployee(Employee employee) {
         //保证userName唯一
         LambdaQueryWrapper<Employee> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(Employee::getUsername, employee.getUsername());
         if (this.count(wrapper) > 0)
             throw new BizException(BizExceptionEnum.USERNAME_IS_EXIST);
 
-        //获取当前登录用户ID
-        Long userId = ((Employee) request.getSession().getAttribute(SESSION_KEY)).getId();
         employee.setPassword(PasswordUtil.encodePassword("123456"));
-        employee.setCreateUser(userId);
-        employee.setUpdateUser(userId);
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+
         return R.success(this.save(employee));
     }
 
@@ -127,20 +120,17 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     /**
      * 更新员工信息
-     * @param request HttpServletRequest
      * @param employee HttpServletRequest
      * @return R
      */
     @Override
-    public R<Object> updateEmployee(HttpServletRequest request, Employee employee) {
+    public R<Object> updateEmployee(Employee employee) {
         Employee.EmployeeBuilder em = Employee.builder()
                 .id(employee.getId())
                 .sex(employee.getSex())
                 .name(employee.getName())
                 .username(employee.getUsername())
-                .status(employee.getStatus())
-                .updateUser(((Employee) request.getSession().getAttribute(SESSION_KEY)).getId())
-                .updateTime(LocalDateTime.now());
+                .status(employee.getStatus());
 
         if (StringUtils.isNotBlank(employee.getIdNumber())
                 && !employee.getIdNumber().contains("*"))

@@ -2,6 +2,7 @@ package com.itheima.reggie.controller;
 
 import com.itheima.reggie.common.R;
 import com.itheima.reggie.entity.Employee;
+import com.itheima.reggie.handler.RequestContextHolder;
 import com.itheima.reggie.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,13 @@ public class EmployeeController {
      * @return
      */
     @PostMapping
-    public R<Object> addEmployee(HttpServletRequest request,
-                                 @RequestBody Employee employee){
-        return employeeService.addEmployee(request, employee);
+    public R<Object> addEmployee(@RequestBody Employee employee){
+        try {
+            return employeeService.addEmployee(employee);
+        }finally {
+            RequestContextHolder.unload();
+        }
+
     }
 
     /**
@@ -77,8 +82,17 @@ public class EmployeeController {
         return employeeService.editEmployee(id);
     }
 
+    /**
+     * 更新员工信息
+     * @param employee
+     * @return
+     */
     @PutMapping
-    public R<Object> updateEmployee(HttpServletRequest request, @RequestBody Employee employee){
-        return employeeService.updateEmployee(request, employee);
+    public R<Object> updateEmployee(@RequestBody Employee employee){
+        try {
+            return employeeService.updateEmployee(employee);
+        }finally {
+            RequestContextHolder.unload();
+        }
     }
 }

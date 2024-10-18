@@ -1,6 +1,7 @@
 package com.itheima.reggie.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.itheima.reggie.handler.RequestContextHolder;
 import com.itheima.reggie.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -59,7 +60,9 @@ public class LoginCheckFilter implements Filter {
 
         //4. 判断登录状态，已登录直接放行
         if (request.getSession().getAttribute("employee") != null){
-            filterChain.doFilter(request, response);
+            Long id = (Long) request.getSession().getAttribute("employee");
+            RequestContextHolder.setCurrentId(id);
+            filterChain.doFilter(request, response);//直接具体的业务处理逻辑
             return;
         }
 
