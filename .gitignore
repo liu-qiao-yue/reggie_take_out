@@ -8,3 +8,4 @@
 /dataSources.local.xml
 target/
 .gitignore/
+/.idea/inspectionProfiles/Project_Default.xml
