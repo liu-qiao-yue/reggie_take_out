@@ -17,7 +17,5 @@ public interface EmployeeService extends IService<Employee> {
 
     R<Object> addEmployee(Employee employee);
 
-    R<Object> editEmployee(String id);
-
     R<Object> updateEmployee(Employee employee);
 }

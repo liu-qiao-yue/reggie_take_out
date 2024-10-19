@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.reggie.common.R;
 import com.itheima.reggie.entity.Category;
 import com.itheima.reggie.enums.BizExceptionEnum;
+import com.itheima.reggie.enums.DeleteField;
 import com.itheima.reggie.exception.BizException;
 import com.itheima.reggie.mapper.CategoryMapper;
 import com.itheima.reggie.service.CategoryService;
@@ -57,7 +58,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         Page<Category> categoryPage = new Page<>(page, pageSize);
         LambdaQueryWrapper<Category> wrapper = Wrappers.lambdaQuery();
         wrapper.orderByAsc(Category::getSort);
-        wrapper.eq(Category::getIsDeleted, 0);
+        wrapper.eq(Category::getIsDeleted, DeleteField.ACTITVE.getValue());
         return R.success(this.baseMapper.selectPage(categoryPage, wrapper));
     }
 
@@ -75,9 +76,17 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         //正常删除分类
         Category category = Category.builder()
                 .id(id)
-                .isDeleted(1)
+                .isDeleted(DeleteField.DELECTED.getValue())
                 .build();
         return R.success(this.updateById(category));
+    }
+
+    @Override
+    public R<Object> getCategoryList(String type) {
+        LambdaQueryWrapper<Category> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(Category::getType, type);
+        wrapper.eq(Category::getIsDeleted, DeleteField.ACTITVE.getValue());
+        return R.success(this.list(wrapper));
     }
 
 

@@ -14,6 +14,7 @@ public enum BizExceptionEnum {
     USERNAME_IS_EXIST(210001, "The username is exist."),
     EMPLOYEE_NOT_FIND(210002, "The employee does not find."),
 
+    //菜品分类模块
     CATEGORY_IS_EXIST(220001, "The category is exist."),
     CATEGORY_IS_RELATED(220002, "This category has related dishes or set menus and cannot be deleted");
 

@@ -80,7 +80,7 @@ public class EmployeeController {
      */
     @GetMapping("{id}")
     public R<Object> editEmployee(@PathVariable String id){
-        return employeeService.editEmployee(id);
+        return R.success(employeeService.getById(id));
     }
 
     /**

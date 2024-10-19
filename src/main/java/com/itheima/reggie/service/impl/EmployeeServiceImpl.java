@@ -104,21 +104,6 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     }
 
     /**
-     * 编辑员工信息
-     * @param id 员工ID
-     * @return R
-     */
-    @Override
-    public R<Object> editEmployee(String id) {
-        Employee employee = this.getById(id);
-        if (employee == null)
-            throw new BizException(BizExceptionEnum.EMPLOYEE_NOT_FIND);
-
-        employee.setPassword(null);
-        return R.success(employee);
-    }
-
-    /**
      * 更新员工信息
      * @param employee HttpServletRequest
      * @return R
