@@ -1,10 +1,13 @@
 package com.itheima.reggie.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.reggie.common.R;
 import com.itheima.reggie.entity.Category;
 import com.itheima.reggie.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/category")
@@ -24,8 +27,8 @@ public class CategoryController {
      * @return
      */
     @PostMapping
-    public R<Object> addCategory(@RequestBody Category category) {
-        return categoryService.addCategory(category);
+    public R<Boolean> addCategory(@RequestBody Category category) {
+        return R.success(categoryService.addCategory(category));
     }
 
     /**
@@ -35,8 +38,8 @@ public class CategoryController {
      * @return
      */
     @GetMapping("/page")
-    public R<Object> categoryPageList(@RequestParam("page") Integer page,@RequestParam("pageSize") Integer pageSize){
-        return categoryService.categoryPageList(page,pageSize);
+    public R<Page<Category>> categoryPageList(@RequestParam("page") Integer page, @RequestParam("pageSize") Integer pageSize){
+        return R.success(categoryService.categoryPageList(page,pageSize));
     }
 
     /**
@@ -45,8 +48,8 @@ public class CategoryController {
      * @return
      */
     @PutMapping
-    public R<Object> updateCategory(@RequestBody Category category) {
-        return categoryService.updateCategory(category);
+    public R<Boolean> updateCategory(@RequestBody Category category) {
+        return R.success(categoryService.updateById(category));
     }
 
     /**
@@ -55,17 +58,17 @@ public class CategoryController {
      * @return
      */
     @DeleteMapping
-    public R<Object> deleteCategory(Long ids) {
-        return categoryService.deleteCategory(ids);
+    public R<Boolean> deleteCategory(Long ids) {
+        return R.success(categoryService.deleteCategory(ids));
     }
 
     /**
      * 获取菜品/套餐分类列表by type
-     * @param type 1:菜品分类 2:套餐分类
+     * @param category 1:菜品分类 2:套餐分类
      * @return
      */
     @GetMapping("/list")
-    public R<Object> getCategoryList(@RequestParam("type") String type) {
-        return categoryService.getCategoryList(type);
+    public R<List<Category>> getCategoryList(Category category) {
+        return R.success(categoryService.getCategoryList(category));
     }
 }

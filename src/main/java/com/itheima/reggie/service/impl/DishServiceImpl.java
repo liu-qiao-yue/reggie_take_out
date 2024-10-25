@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.itheima.reggie.common.R;
+import com.itheima.reggie.dto.DishDto;
 import com.itheima.reggie.entity.Dish;
 import com.itheima.reggie.mapper.DishMapper;
 import com.itheima.reggie.service.DishService;
@@ -37,12 +37,12 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
      * @return
      */
     @Override
-    public R<Object> dishPageList(Integer page, Integer pageSize, String name) {
+    public Page<Dish> dishPageList(Integer page, Integer pageSize, String name) {//todo
         Page<Dish> dishPage = new Page<>(page, pageSize);
         LambdaQueryWrapper<Dish> dishWrapper = Wrappers.lambdaQuery();
         dishWrapper.like(name != null, Dish::getName, name);
         dishWrapper.orderByDesc(Dish::getUpdateTime);
-        return R.success(this.baseMapper.selectPage(dishPage, dishWrapper));
+        return this.baseMapper.selectPage(dishPage, dishWrapper);
     }
 
     /**
@@ -52,13 +52,18 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
      * @return
      */
     @Override
-    public R<Object> updateDishStatus(Integer status, String ids) {
+    public boolean updateDishStatus(Integer status, String ids) {//todo
         String[] idsArr = ids.split(",");
         List<Dish> dishes = new ArrayList<>();
         Arrays.stream(idsArr).forEach(id ->
                 dishes.add(Dish.builder().id(Long.parseLong(id)).status(status).build())
         );
-        return R.success(this.updateBatchById(dishes));
+        return this.updateBatchById(dishes);
 
+    }
+
+    @Override
+    public boolean saveDishInfos(DishDto dto) { //todo
+        return false;
     }
 }

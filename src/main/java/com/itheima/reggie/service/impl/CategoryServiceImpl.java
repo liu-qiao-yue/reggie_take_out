@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.itheima.reggie.common.R;
 import com.itheima.reggie.entity.Category;
 import com.itheima.reggie.enums.BizExceptionEnum;
 import com.itheima.reggie.enums.DeleteField;
@@ -15,6 +14,8 @@ import com.itheima.reggie.service.DishService;
 import com.itheima.reggie.service.SetmealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
@@ -36,7 +37,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return
      */
     @Override
-    public R<Object> addCategory(Category category) {
+    public boolean addCategory(Category category) {
         //验证name唯一
         LambdaQueryWrapper<Category> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(Category::getName, category.getName());
@@ -44,31 +45,26 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
             throw new BizException(BizExceptionEnum.CATEGORY_IS_EXIST);
 
         //保存数据
-        return R.success(this.save(category));
+        return this.save(category);
     }
 
     /**
      * 菜品分类分页查询
      * @param page 第几页
      * @param pageSize 每页几行
-     * @return
+     * @return total:总行数 records:当前页数据
      */
     @Override
-    public R<Object> categoryPageList(Integer page, Integer pageSize) {
+    public Page<Category> categoryPageList(Integer page, Integer pageSize) {
         Page<Category> categoryPage = new Page<>(page, pageSize);
         LambdaQueryWrapper<Category> wrapper = Wrappers.lambdaQuery();
         wrapper.orderByAsc(Category::getSort);
         wrapper.eq(Category::getIsDeleted, DeleteField.ACTITVE.getValue());
-        return R.success(this.baseMapper.selectPage(categoryPage, wrapper));
+        return this.baseMapper.selectPage(categoryPage, wrapper);
     }
 
     @Override
-    public R<Object> updateCategory(Category category) {
-        return R.success(this.updateById(category));
-    }
-
-    @Override
-    public R<Object> deleteCategory(Long id) {
+    public boolean deleteCategory(Long id) {
         //查询你当前分类是否关联了菜品或套餐，如果已经关联，抛出异常
         if (!canDeleteCategory(id))
             throw new BizException(BizExceptionEnum.CATEGORY_IS_RELATED);
@@ -78,15 +74,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
                 .id(id)
                 .isDeleted(DeleteField.DELECTED.getValue())
                 .build();
-        return R.success(this.updateById(category));
+        return this.updateById(category);
     }
 
     @Override
-    public R<Object> getCategoryList(String type) {
+    public List<Category> getCategoryList(Category category) {
         LambdaQueryWrapper<Category> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(Category::getType, type);
+        wrapper.eq(Category::getType, category.getType());
         wrapper.eq(Category::getIsDeleted, DeleteField.ACTITVE.getValue());
-        return R.success(this.list(wrapper));
+        wrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
+        return this.list(wrapper);
     }
 
 

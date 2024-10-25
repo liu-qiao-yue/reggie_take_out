@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import static com.itheima.reggie.annotation.MaskInfo.MaskType.PARTIAL;
+
 /**
  * 员工实体
  */
@@ -31,11 +33,12 @@ public class Employee implements Serializable {
     @MaskInfo
     private String password;
 
+    @MaskInfo(type=PARTIAL)
     private String phone;
 
     private String sex;
 
-    @MaskInfo
+    @MaskInfo(type=PARTIAL)
     private String idNumber;//身份证
 
     private Integer status;

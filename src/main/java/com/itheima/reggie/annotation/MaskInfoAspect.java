@@ -96,7 +96,8 @@ public class MaskInfoAspect {
                 try {
                     Object value = field.get(obj);
                     if (value instanceof String) {
-                        String maskedValue = maskString((String) value);
+                        MaskInfo maskInfo = field.getAnnotation(MaskInfo.class);
+                        String maskedValue = maskString((String) value, maskInfo.type());
                         field.set(obj, maskedValue);//NOSONAR
                     } else if (value != null && !isBasicTypeOrWrapper(value)) {
                         // 如果字段是一个对象，则递归处理
@@ -152,15 +153,47 @@ public class MaskInfoAspect {
         return newArray;
     }
 
-    private String maskString(String str) {
+    /**
+     * 对字符串进行掩码处理。
+     * @param str
+     * @param type
+     * @return
+     */
+    private String maskString(String str, MaskInfo.MaskType type) {
         if (str == null || str.isEmpty()) {
             return str;
         }
         int length = str.length();
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
+        switch (type) {
+            case FULL:
+                return maskFull(str);
+            case PARTIAL:
+                return maskPartial(str);
+            default:
+                return str; // 不做处理
+        }
+    }
+
+    private String maskFull(String str) {
+        StringBuilder sb = new StringBuilder(str.length());
+        for (int i = 0; i < str.length(); i++) {
             sb.append('*');
         }
         return sb.toString();
+    }
+
+    private String maskPartial(String str) {
+        int length = str.length();
+        if (length <= 7) {
+            // 字符串太短，无需掩码
+            return str;
+        }
+        String frontPart = str.substring(0, 3);
+        String backPart = str.substring(length - 4);
+        StringBuilder middlePart = new StringBuilder(length - 7);
+        for (int i = 0; i < length - 7; i++) {
+            middlePart.append('*');
+        }
+        return frontPart + middlePart.toString() + backPart;
     }
 }

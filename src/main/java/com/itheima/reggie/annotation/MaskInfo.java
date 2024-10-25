@@ -12,4 +12,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME) // 注解保留在运行时
 public @interface MaskInfo {
     // 可以在这里定义注解的属性，如果有需要的话
+    enum MaskType {
+        FULL, // 全隐藏，默认
+        PARTIAL // 部分隐藏
+    }
+
+    MaskType type() default MaskType.FULL;
 }

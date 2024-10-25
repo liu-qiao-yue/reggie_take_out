@@ -1,5 +1,6 @@
 package com.itheima.reggie.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.reggie.common.R;
 import com.itheima.reggie.entity.Employee;
 import com.itheima.reggie.handler.RequestContextHolder;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -32,7 +34,7 @@ public class EmployeeController {
     @PostMapping("/login")
     public R<Employee> employeeLogin(HttpServletRequest request,
                                      @RequestBody Employee employee){
-        return employeeService.login(request, employee);
+        return R.success(employeeService.login(request, employee));
     }
 
     /**
@@ -41,8 +43,18 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/logout")
-    public R<Object> employeeLogout(HttpServletRequest request){
-        return employeeService.logout(request);
+    public R<String> employeeLogout(HttpServletRequest request){
+        return R.success(employeeService.logout(request));
+    }
+
+    /**
+     * 修改密码 / 重置密码
+     * @param passwordInfo 用户名&旧密码&新密码&修改类型[change|reset]
+     * @return
+     */
+    @PostMapping("/changePassword")
+    public R<Boolean> changePassword(@RequestBody Map<String, String> passwordInfo){
+        return R.success(employeeService.changePassword(passwordInfo));
     }
 
     /**
@@ -51,9 +63,9 @@ public class EmployeeController {
      * @return
      */
     @PostMapping
-    public R<Object> addEmployee(@RequestBody Employee employee){
+    public R<Boolean> addEmployee(@RequestBody Employee employee){
         try {
-            return employeeService.addEmployee(employee);
+            return R.success(employeeService.addEmployee(employee));
         }finally {
             RequestContextHolder.unload();
         }
@@ -67,10 +79,10 @@ public class EmployeeController {
      * @return
      */
     @GetMapping("/page")
-    public R<Object> employeePageList(@RequestParam("page") Integer page,
-                                      @RequestParam("pageSize") Integer pageSize,
-                                      @RequestParam(value = "name", required = false)String name){
-        return employeeService.employeePageList(page, pageSize, name);
+    public R<Page<Employee>> employeePageList(@RequestParam("page") Integer page,
+                                    @RequestParam("pageSize") Integer pageSize,
+                                    @RequestParam(value = "name", required = false)String name){
+        return R.success(employeeService.employeePageList(page, pageSize, name));
     }
 
     /**
@@ -79,7 +91,7 @@ public class EmployeeController {
      * @return
      */
     @GetMapping("{id}")
-    public R<Object> editEmployee(@PathVariable String id){
+    public R<Employee> editEmployee(@PathVariable String id){
         return R.success(employeeService.getById(id));
     }
 
@@ -89,9 +101,9 @@ public class EmployeeController {
      * @return
      */
     @PutMapping
-    public R<Object> updateEmployee(@RequestBody Employee employee){
+    public R<String> updateEmployee(@RequestBody Employee employee){
         try {
-            return employeeService.updateEmployee(employee);
+            return R.success(employeeService.updateEmployee(employee));
         }finally {
             RequestContextHolder.unload();
         }
