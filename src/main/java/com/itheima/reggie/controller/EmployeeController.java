@@ -2,6 +2,7 @@ package com.itheima.reggie.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.reggie.common.R;
+import com.itheima.reggie.dto.EmployeeDto;
 import com.itheima.reggie.entity.Employee;
 import com.itheima.reggie.handler.RequestContextHolder;
 import com.itheima.reggie.service.EmployeeService;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -49,12 +49,22 @@ public class EmployeeController {
 
     /**
      * 修改密码 / 重置密码
-     * @param passwordInfo 用户名&旧密码&新密码&修改类型[change|reset]
+     * @param employeeDto
      * @return
      */
     @PostMapping("/changePassword")
-    public R<Boolean> changePassword(@RequestBody Map<String, String> passwordInfo){
-        return R.success(employeeService.changePassword(passwordInfo));
+    public R<Boolean> changePassword(@RequestBody EmployeeDto employeeDto){
+        return R.success(employeeService.changePassword(employeeDto));
+    }
+
+    /**
+     * 忘记密码
+     * @param employeeDto
+     * @return
+     */
+    @PostMapping("/forgotPassword")
+    public R<Boolean> forgotPassword(@RequestBody EmployeeDto employeeDto){
+        return R.success(employeeService.changePassword(employeeDto));
     }
 
     /**
@@ -107,5 +117,12 @@ public class EmployeeController {
         }finally {
             RequestContextHolder.unload();
         }
+    }
+
+    // 查找员工名称是否存在与数据库
+
+    @PostMapping("/validate")
+    public R<Boolean> findEmployeeName(@RequestBody Employee employee){
+        return R.success(employeeService.validate(employee));
     }
 }

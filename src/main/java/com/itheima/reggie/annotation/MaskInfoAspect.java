@@ -163,7 +163,6 @@ public class MaskInfoAspect {
         if (str == null || str.isEmpty()) {
             return str;
         }
-        int length = str.length();
         switch (type) {
             case FULL:
                 return maskFull(str);

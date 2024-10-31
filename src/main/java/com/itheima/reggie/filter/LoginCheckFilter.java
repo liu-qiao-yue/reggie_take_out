@@ -45,6 +45,7 @@ public class LoginCheckFilter implements Filter {
         //2. 判断本次请求是否需要处理 -> 检查登录状态
         //2.1 不需要处理的请求
         String[] urls = new String[]{
+                "/employee/forgotPassword",
                 "/employee/login",
                 "/employee/logout",
                 "/backend/**",
@@ -54,6 +55,7 @@ public class LoginCheckFilter implements Filter {
         boolean match = checkUrl(requestURI, urls);
         //3. 如果不需要处理则直接放行
         if (match) {
+            RequestContextHolder.setCurrentId(1L);
             filterChain.doFilter(request, response);
             return;
         }

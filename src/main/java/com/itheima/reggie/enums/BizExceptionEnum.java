@@ -11,6 +11,7 @@ public enum BizExceptionEnum {
     ACCOUNT_FORBIDDEN(100002, "The account has been banned from use."),
     //通用模块
     UPDATE_ERROR(100003, "update error."),
+    INPUT_ERROR(100004, "input error."),
     //员工模块
     USERNAME_IS_EXIST(210001, "The username is exist."),
     EMPLOYEE_NOT_FIND(210002, "The employee does not find."),

@@ -6,23 +6,30 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.reggie.common.PasswordUtil;
+import com.itheima.reggie.dto.EmployeeDto;
 import com.itheima.reggie.entity.Employee;
 import com.itheima.reggie.enums.BizExceptionEnum;
 import com.itheima.reggie.exception.BizException;
 import com.itheima.reggie.mapper.EmployeeMapper;
 import com.itheima.reggie.service.EmployeeService;
+import com.itheima.reggie.service.UpdatePasswordService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+import java.util.List;
 
 @Slf4j
 @Service
 public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService {
 
     private static final String SESSION_KEY = "employee";
+
+    // 策略模式：密码修改
+    @Autowired
+    private List<UpdatePasswordService> passwordServices;
 
     /**
      * 登录逻辑: 根据前端输入用户名 -> 查询数据库该用户是否存在 -> 比对密码 -> 查看员工状态是否被禁用 -> 将用户id存入session
@@ -54,6 +61,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     /**
      * 退出登录 -> 清除session
+     *
      * @param request HttpServletRequest
      * @return R
      */
@@ -61,14 +69,15 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     public String logout(HttpServletRequest request) {
         //清除session
         request.getSession().removeAttribute(SESSION_KEY);
-        return"Logged out.";
+        return "Logged out.";
     }
 
     /**
      * 分页查询员工信息
-     * @param page 当前页
+     *
+     * @param page     当前页
      * @param pageSize 每页多少行
-     * @param name 名称
+     * @param name     名称
      * @return R
      */
     @Override
@@ -78,7 +87,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         //构造条件构造器
         LambdaQueryWrapper<Employee> wrapper = Wrappers.lambdaQuery();
         //添加过滤条件
-        wrapper.like(StringUtils.isNotBlank(name),Employee::getName, name);
+        wrapper.like(StringUtils.isNotBlank(name), Employee::getName, name);
         wrapper.orderByDesc(Employee::getUpdateTime);
         //执行查询
         this.baseMapper.selectPage(employeePage, wrapper);
@@ -87,6 +96,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     /**
      * 新增员工
+     *
      * @param employee 员工信息
      * @return R
      */
@@ -98,13 +108,14 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         if (this.count(wrapper) > 0)
             throw new BizException(BizExceptionEnum.USERNAME_IS_EXIST);
 
-        employee.setPassword(PasswordUtil.encodePassword("123456"));
+        employee.setPassword(PasswordUtil.encodePassword(employee.getPassword()));
 
         return this.save(employee);
     }
 
     /**
      * 更新员工信息
+     *
      * @param employee HttpServletRequest
      * @return R
      */
@@ -118,10 +129,8 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
                 .phone(employee.getPhone())
                 .status(employee.getStatus());
 
-//        if (StringUtils.isNotBlank(employee.getIdNumber())
-//                && !employee.getIdNumber().contains("*"))
-            //身份证
-            em.idNumber(employee.getIdNumber());
+        //身份证
+        em.idNumber(employee.getIdNumber());
 
         //updateById时
         if (!this.updateById(em.build()))
@@ -130,18 +139,21 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     }
 
     @Override
-    public Boolean changePassword(Map<String, String> passwordInfo) {
-        Employee emp = this.getById(passwordInfo.get("id"));
-        //用户不存在
-        if (emp == null)
-            throw new BizException(BizExceptionEnum.USERNAME_ERROR);
+    public Boolean changePassword(EmployeeDto employeeDto) {
+        return passwordServices
+                .stream()
+                .filter(service -> service.validate(employeeDto.getType()))
+                .findFirst()
+                .orElseThrow(() -> new BizException(BizExceptionEnum.INPUT_ERROR))
+                .process(employeeDto);
+    }
 
-        //密码错误
-        if (StringUtils.equals(passwordInfo.get("type"), "change")
-                &&!PasswordUtil.matches(passwordInfo.get("oldPassword"), emp.getPassword()))
-            throw new BizException(BizExceptionEnum.PASSWORD_ERROR);
-
-        emp.setPassword(PasswordUtil.encodePassword(passwordInfo.get("newPassword")));
-        return this.updateById(emp);
+    @Override
+    public Boolean validate(Employee employee) {
+        LambdaQueryWrapper<Employee> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(Employee::getUsername, employee.getUsername());
+        if (employee.getId() != null)
+            wrapper.ne(Employee::getId, employee.getId());
+        return this.count(wrapper) > 0;
     }
 }

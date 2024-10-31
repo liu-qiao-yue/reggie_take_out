@@ -143,47 +143,4 @@ public class FileCommonController {
         }
 
     }
-
-/*     public R<String> upload(MultipartFile file) {//使用该对象接收前台请求的文件，型参名要与前台表单名保持一致
-        //file是一个临时文件，需要转存到指定位置，否则本次请求完成后临时文件会删除
-
-        //获取原始文件名
-        String originalFilename = file.getOriginalFilename();//假设原始文件名：abc.jpg
-        //截取文件名后缀，从最后一个点的位置开始截取(包含点)，截取到结尾的字符串
-        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-
-        //使用UUID重新生成文件名，防止文件名称重复造成文件覆盖
-        String UUIDfileName = UUID.randomUUID().toString()+suffix;//就要在生成的随机名称后加上文件后缀：xxx.jpg
-
-        //new一个目录对象
-        File dir = new File(basePath);
-        //判断当前目录是否存在
-        if(!dir.exists()){
-            //目录不存在，就创建该目录
-            dir.mkdirs();
-        }
-
-        try {
-            //将临时文件转存到指定位置
-            file.transferTo(new File(basePath+UUIDfileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //响应文件名给前端
-        return R.success(UUIDfileName);
-    }
-
-    public R<byte[]> access(String name) {
-        byte[] fileData = {};
-        try {
-            Path filePath = this.uploadDir.resolve(name).normalize();
-            // 读取图片数据
-            fileData = Files.readAllBytes(filePath);
-        }catch (IOException e){
-            throw new BizException(BizExceptionEnum.FILE_ACCESS_ERROR);
-        }
-        // 返回图片数据
-        return R.success(fileData);
-    }*/
 }

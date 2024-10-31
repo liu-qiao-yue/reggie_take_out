@@ -3,10 +3,10 @@ package com.itheima.reggie.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.itheima.reggie.dto.EmployeeDto;
 import com.itheima.reggie.entity.Employee;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 public interface EmployeeService extends IService<Employee> {
 
@@ -20,5 +20,7 @@ public interface EmployeeService extends IService<Employee> {
 
     String updateEmployee(Employee employee);
 
-    Boolean changePassword(Map<String, String> passwordInfo);
+    Boolean changePassword(EmployeeDto employeeDto);
+
+    Boolean validate(Employee employee);
 }
