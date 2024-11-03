@@ -15,6 +15,7 @@ import static com.itheima.reggie.annotation.MaskInfo.MaskType.PARTIAL;
 
 /**
  * 员工实体
+ * @author ellie
  */
 @Data
 @Builder
@@ -39,11 +40,11 @@ public class Employee implements Serializable {
     private String sex;
 
     @MaskInfo(type=PARTIAL)
-    private String idNumber;//身份证
+    private String idNumber;
 
     private Integer status;
 
-    @TableField(fill = FieldFill.INSERT)// 公共字段自动填充
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)

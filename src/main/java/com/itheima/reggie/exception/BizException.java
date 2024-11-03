@@ -3,11 +3,20 @@ package com.itheima.reggie.exception;
 import com.itheima.reggie.enums.BizExceptionEnum;
 import lombok.Data;
 
+/**
+ * @author ellie
+ */
 @Data
 public class BizException extends RuntimeException {
 
-    private final Integer code; //业务异常码
-    private final String msg; //业务异常信息
+    /**
+     * 业务异常码
+     */
+    private final Integer code;
+    /**
+     * 业务异常信息
+     */
+    private final String msg;
     public BizException(Integer code, String message) {
         super(message);
         this.code = code;

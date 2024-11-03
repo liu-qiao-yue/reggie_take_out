@@ -1,8 +1,18 @@
 package com.itheima.reggie.enums;
 
+/**
+ * @author ellie
+ */
+
 public enum DeleteField {
-    DELECTED(1),// deleted
-    ACTITVE(0);//active
+    /**
+     * deleted
+     */
+    DELECTED(1),
+    /**
+     * active
+     */
+    ACTITVE(0);
 
     private final int value;
 

@@ -24,6 +24,7 @@ import java.util.UUID;
 
 /**
  * 实现图片上传/访问/下载
+ * @author ellie
  */
 @Slf4j
 @RestController
@@ -38,7 +39,8 @@ public class FileCommonController {
     public FileCommonController(FileConfig fileConfig) {
         this.fileConfig = fileConfig;
         this.uploadDir = Paths.get(fileConfig.getBasePath());
-        log.info("Base path: " + fileConfig.getBasePath()); // 输出basePath检查是否为空
+        // 输出basePath检查是否为空
+        log.info("Base path: " + fileConfig.getBasePath());
     }
 
     /**
@@ -49,12 +51,13 @@ public class FileCommonController {
     @PostMapping("/upload")
     public R<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
         //获取原始文件名。假设原始文件名：abc.jpg
-        String originalFilename = file.getOriginalFilename(); //NOSONAR
+        String originalFilename = file.getOriginalFilename();
         //截取文件名后缀，从最后一个点的位置开始截取(包含点)，截取到结尾的字符串
-        String suffix = originalFilename.substring(originalFilename.lastIndexOf(".")); //NOSONAR
+        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
 
         //使用UUID重新生成文件名，防止文件名称重复造成文件覆盖
-        String newfileName = UUID.randomUUID().toString() + suffix;//就要在生成的随机名称后加上文件后缀：xxx.jpg
+        //就要在生成的随机名称后加上文件后缀：xxx.jpg
+        String newfileName = UUID.randomUUID().toString() + suffix;
 
         try{
             // 确保上传目录存在
@@ -80,8 +83,8 @@ public class FileCommonController {
     @GetMapping("download")
     public void downloadFile(@RequestParam("name") String name, HttpServletResponse response) {
         File file = new File(fileConfig.getBasePath() + name);
-
-        if(file.exists()){ // 如果文件存在
+        // 如果文件存在
+        if(file.exists()){
             try {
                 // 设置响应类型为二进制流
                 response.setContentType("application/octet-stream");
@@ -107,7 +110,8 @@ public class FileCommonController {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         } else { // 如果文件不存在
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 返回404 Not Found
+            // 返回404 Not Found
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 

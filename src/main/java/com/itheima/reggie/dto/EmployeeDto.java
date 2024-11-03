@@ -5,8 +5,14 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author ellie
+ */
 @Data
 public class EmployeeDto extends Employee  implements Serializable {
     private String oldPassword;
-    private String type;// 1:修改密码 2:修改信息
+    /**
+     * 1:修改密码 2:修改信息
+     */
+    private String type;
 }

@@ -9,6 +9,9 @@ import com.itheima.reggie.mapper.SetmealMapper;
 import com.itheima.reggie.service.SetmealService;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author ellie
+ */
 @Service
 public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> implements SetmealService {
 

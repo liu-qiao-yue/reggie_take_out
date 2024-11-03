@@ -21,13 +21,18 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * @author ellie
+ */
 @Slf4j
 @Service
 public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService {
 
-    private static final String SESSION_KEY = "employee";
+    public static final String SESSION_KEY = "employee";
 
-    // 策略模式：密码修改
+    /**
+     *  策略模式：密码修改
+     */
     @Autowired
     private List<UpdatePasswordService> passwordServices;
 
@@ -44,15 +49,18 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         wrapper.eq(Employee::getUsername, employee.getUsername());
         Employee emp = this.getOne(wrapper);
         //用户不存在
-        if (emp == null)
+        if (emp == null) {
             throw new BizException(BizExceptionEnum.USERNAME_ERROR);
+        }
 
         //密码错误
-        if (!PasswordUtil.matches(employee.getPassword(), emp.getPassword()))
+        if (!PasswordUtil.matches(employee.getPassword(), emp.getPassword())) {
             throw new BizException(BizExceptionEnum.PASSWORD_ERROR);
+        }
         //是否被禁用
-        if (emp.getStatus() == 0)
+        if (emp.getStatus() == 0) {
             throw new BizException(BizExceptionEnum.ACCOUNT_FORBIDDEN);
+        }
 
         //存入session
         request.getSession().setAttribute(SESSION_KEY, emp.getId());
@@ -105,8 +113,9 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         //保证userName唯一
         LambdaQueryWrapper<Employee> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(Employee::getUsername, employee.getUsername());
-        if (this.count(wrapper) > 0)
+        if (this.count(wrapper) > 0) {
             throw new BizException(BizExceptionEnum.USERNAME_IS_EXIST);
+        }
 
         employee.setPassword(PasswordUtil.encodePassword(employee.getPassword()));
 
@@ -133,8 +142,9 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         em.idNumber(employee.getIdNumber());
 
         //updateById时
-        if (!this.updateById(em.build()))
+        if (!this.updateById(em.build())) {
             throw new BizException(BizExceptionEnum.UPDATE_ERROR);
+        }
         return "update success.";
     }
 
@@ -152,8 +162,9 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     public Boolean validate(Employee employee) {
         LambdaQueryWrapper<Employee> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(Employee::getUsername, employee.getUsername());
-        if (employee.getId() != null)
+        if (employee.getId() != null) {
             wrapper.ne(Employee::getId, employee.getId());
+        }
         return this.count(wrapper) > 0;
     }
 }

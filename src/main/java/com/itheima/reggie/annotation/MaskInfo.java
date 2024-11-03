@@ -7,14 +7,25 @@ import java.lang.annotation.Target;
 
 /**
  * 标记需要掩码处理的字段。
+ * @author ellie
  */
-@Target(ElementType.FIELD) // 注解作用在字段上
-@Retention(RetentionPolicy.RUNTIME) // 注解保留在运行时
+@SuppressWarnings("ALL")
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface MaskInfo {
-    // 可以在这里定义注解的属性，如果有需要的话
+    /**
+     * 字段隐藏类型
+     */
     enum MaskType {
-        FULL, // 全隐藏，默认
-        PARTIAL // 部分隐藏
+
+        /**
+         * 全隐藏，默认
+         */
+        FULL,
+        /**
+         * 部分隐藏
+         */
+        PARTIAL
     }
 
     MaskType type() default MaskType.FULL;

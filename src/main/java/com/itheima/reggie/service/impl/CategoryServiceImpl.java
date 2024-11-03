@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author ellie
+ */
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
 
@@ -41,8 +44,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         //验证name唯一
         LambdaQueryWrapper<Category> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(Category::getName, category.getName());
-        if(this.count(wrapper) > 0)
+        if(this.count(wrapper) > 0){
             throw new BizException(BizExceptionEnum.CATEGORY_IS_EXIST);
+        }
 
         //保存数据
         return this.save(category);
@@ -66,8 +70,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override
     public boolean deleteCategory(Long id) {
         //查询你当前分类是否关联了菜品或套餐，如果已经关联，抛出异常
-        if (!canDeleteCategory(id))
+        if (!canDeleteCategory(id)){
             throw new BizException(BizExceptionEnum.CATEGORY_IS_RELATED);
+        }
 
         //正常删除分类
         Category category = Category.builder()

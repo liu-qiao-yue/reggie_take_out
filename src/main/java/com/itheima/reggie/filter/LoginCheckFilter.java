@@ -13,14 +13,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.itheima.reggie.service.impl.EmployeeServiceImpl.SESSION_KEY;
+
 /**
  * 检查用户是否已经完成登录
+ * @author ellie
  */
 @Slf4j
-@WebFilter(filterName = "loginCheckFilter", urlPatterns = "/*") // 过滤器,拦截所有请求，filterName为过滤器名称
+@WebFilter(filterName = "loginCheckFilter", urlPatterns = "/*")
 public class LoginCheckFilter implements Filter {
 
-    //路径匹配器
+    /**
+     * 路径匹配器
+     */
     public static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
 
     /**
@@ -41,7 +46,7 @@ public class LoginCheckFilter implements Filter {
             return;
         }
         //1. 获取本次请求的URL
-        String requestURI = request.getRequestURI();
+        String requestUrl = request.getRequestURI();
         //2. 判断本次请求是否需要处理 -> 检查登录状态
         //2.1 不需要处理的请求
         String[] urls = new String[]{
@@ -52,7 +57,7 @@ public class LoginCheckFilter implements Filter {
                 "/front/**"
         };
         //2.2 本次url是否在urls里面。
-        boolean match = checkUrl(requestURI, urls);
+        boolean match = checkUrl(requestUrl, urls);
         //3. 如果不需要处理则直接放行
         if (match) {
             RequestContextHolder.setCurrentId(1L);
@@ -61,10 +66,11 @@ public class LoginCheckFilter implements Filter {
         }
 
         //4. 判断登录状态，已登录直接放行
-        if (request.getSession().getAttribute("employee") != null){
-            Long id = (Long) request.getSession().getAttribute("employee");
+        if (request.getSession().getAttribute(SESSION_KEY) != null){
+            Long id = (Long) request.getSession().getAttribute(SESSION_KEY);
             RequestContextHolder.setCurrentId(id);
-            filterChain.doFilter(request, response);//直接具体的业务处理逻辑
+            //已登录直接放行
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -74,14 +80,16 @@ public class LoginCheckFilter implements Filter {
 
     /**
      * 判断本次url是否在urls里面
-     * @param requestURI
+     * @param requestUrl
      * @param urls
      * @return
      */
-    public boolean checkUrl(String requestURI, String[] urls){
+    public boolean checkUrl(String requestUrl, String[] urls){
         for(String url: urls){
-            boolean match = PATH_MATCHER.match(url, requestURI);
-            if (match) return true;
+            boolean match = PATH_MATCHER.match(url, requestUrl);
+            if (match) {
+                return true;
+            }
         }
         return false;
     }

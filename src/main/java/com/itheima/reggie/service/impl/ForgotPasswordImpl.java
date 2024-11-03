@@ -10,8 +10,11 @@ import com.itheima.reggie.exception.BizException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author ellie
+ */
 @Component
-public class ForgotPasswordImpl extends UpdatePasswordServiceImpl {
+public class ForgotPasswordImpl extends AbstractUpdatePasswordServiceImpl {
     @Override
     public boolean validate(String type) {
         return StringUtils.equals(type, "forgot");
@@ -26,8 +29,9 @@ public class ForgotPasswordImpl extends UpdatePasswordServiceImpl {
 
         Integer count = super.employeeMapper.selectCount(wrapper);
 
-        if (count != 1)
+        if (count != 1) {
             throw new BizException(BizExceptionEnum.USERNAME_ERROR);
+        }
 
         Employee employee = Employee
                 .builder()

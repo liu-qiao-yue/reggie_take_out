@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * 配置类，用于配置Web应用程序的资源路径映射、消息转换器和ObjectMapper。
+ * @author ellie
  */
 @Slf4j
 @Configuration

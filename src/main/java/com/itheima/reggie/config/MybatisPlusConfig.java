@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * 解决mybatis-plus SelectPage 没有total的问题
+ * @author ellie
  */
 @Configuration
 public class MybatisPlusConfig {
@@ -17,9 +18,6 @@ public class MybatisPlusConfig {
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(){
-//        public PaginationInterceptor paginationInterceptor() { //NOSONAR
-//            return new PaginationInterceptor(); //NOSONAR
-//        } //NOSONAR
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
         mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return mybatisPlusInterceptor;

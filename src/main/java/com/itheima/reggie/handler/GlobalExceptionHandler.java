@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
  * <p>
  * 前端关心异常状态，后端正确业务流程。
  * 推荐：后端只编写正确的业务逻辑，如果出现业务问题，后端通过抛异常的方式提前中断业务逻辑。前端感知异常；
- *
+ * @author ellie
+ * {@code @ControllerAdvice } 告诉Spring，这个组件是专门负责进行全局异常处理的
+ * {@code @ResponseBody } 结果还是以JSON的形式写出去
  */
-
 @Slf4j
-@ResponseBody// 结果还是以JSON的形式写出去
-@ControllerAdvice(annotations = {RestController.class, Controller.class}) //告诉Spring，这个组件是专门负责进行全局异常处理的
+@ResponseBody
+@ControllerAdvice(annotations = {RestController.class, Controller.class})
 public class GlobalExceptionHandler {
 
     /**

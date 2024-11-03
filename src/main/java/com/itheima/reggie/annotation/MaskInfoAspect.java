@@ -15,21 +15,31 @@ import java.util.*;
 
 /**
  * 掩码切面，用于对返回的数据进行掩码处理，避免敏感信息泄露
+ * {@code @Aspect} 定义切面
+ * {@code @Component } 将切面注册为Spring bean
+ * @author ellie
  */
-@Aspect // 定义切面
-@Component // 将切面注册为Spring bean
+@Aspect
+@Component
 public class MaskInfoAspect {
 
-    // 定义切点
+    /**
+     * 定义切点
+     */
     @Pointcut("execution(* com.itheima.reggie.controller..*.*(..))")
     public void controllerMethods() {
     }
 
-    // 定义around通知
+    /**
+     * 定义around通知
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
     @Around("controllerMethods()")
     public Object maskFields(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object result = joinPoint.proceed(); // 执行原方法
-        return maskData(result); // 对返回的结果进行掩码处理
+        Object result = joinPoint.proceed();
+        return maskData(result);
     }
 
     /**
@@ -48,8 +58,8 @@ public class MaskInfoAspect {
             maskData(data);
             try {
                 Field dataField = r.getClass().getDeclaredField("data");
-                dataField.setAccessible(true);// NOSONAR
-                dataField.set(r, data);// NOSONAR
+                dataField.setAccessible(true);
+                dataField.set(r, data);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new MaskException(e.getMessage());
             }
@@ -100,8 +110,8 @@ public class MaskInfoAspect {
                         String maskedValue = maskString((String) value, maskInfo.type());
                         field.set(obj, maskedValue);//NOSONAR
                     } else if (value != null && !isBasicTypeOrWrapper(value)) {
-                        // 如果字段是一个对象，则递归处理
-                        maskData(value); // 递归处理非字符串类型的值
+                        // 如果字段是一个对象，则递归处理 递归处理非字符串类型的值
+                        maskData(value);
                     }
                 } catch (IllegalAccessException e) {
                     throw new MaskException(e.getMessage());
@@ -169,7 +179,8 @@ public class MaskInfoAspect {
             case PARTIAL:
                 return maskPartial(str);
             default:
-                return str; // 不做处理
+                // 不做处理
+                return str;
         }
     }
 

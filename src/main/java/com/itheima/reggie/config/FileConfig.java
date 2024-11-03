@@ -3,6 +3,9 @@ package com.itheima.reggie.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author ellie
+ */
 @Component
 public class FileConfig {
 

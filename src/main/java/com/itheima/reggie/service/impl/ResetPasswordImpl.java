@@ -8,8 +8,11 @@ import com.itheima.reggie.exception.BizException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author ellie
+ */
 @Component
-public class ResetPasswordImpl extends UpdatePasswordServiceImpl{
+public class ResetPasswordImpl extends AbstractUpdatePasswordServiceImpl{
     @Override
     public boolean validate(String type) {
         return StringUtils.equals(type, "reset");
@@ -20,8 +23,9 @@ public class ResetPasswordImpl extends UpdatePasswordServiceImpl{
 
         Employee emp = super.employeeMapper.selectById(employeeDto.getId());
         //用户不存在
-        if (emp == null)
+        if (emp == null) {
             throw new BizException(BizExceptionEnum.USERNAME_ERROR);
+        }
 
         emp.setPassword(PasswordUtil.encodePassword(employeeDto.getPassword()));
         return super.employeeMapper.updateById(emp) > 0;

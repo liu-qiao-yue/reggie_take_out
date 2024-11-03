@@ -5,13 +5,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * 密码工具类
+ * @author ellie
  */
 public class PasswordUtil {
 
     PasswordUtil(){
         throw new IllegalStateException("Utility class");
     }
-    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     /**
      * 密码比对
@@ -20,7 +21,7 @@ public class PasswordUtil {
      * @return
      */
     public static boolean matches(String rawPassword, String encodedPassword){
-        return passwordEncoder.matches(rawPassword, encodedPassword);
+        return PASSWORD_ENCODER.matches(rawPassword, encodedPassword);
     }
 
     /**
@@ -29,6 +30,6 @@ public class PasswordUtil {
      * @return
      */
     public static String encodePassword(String rawPassword) {
-        return passwordEncoder.encode(rawPassword);
+        return PASSWORD_ENCODER.encode(rawPassword);
     }
 }

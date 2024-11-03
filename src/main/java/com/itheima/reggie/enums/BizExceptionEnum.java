@@ -2,6 +2,10 @@ package com.itheima.reggie.enums;
 
 import lombok.Getter;
 
+/**
+ * @author ellie
+ */
+
 @Getter
 public enum BizExceptionEnum {
 
