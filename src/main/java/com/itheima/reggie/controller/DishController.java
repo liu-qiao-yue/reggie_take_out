@@ -1,5 +1,6 @@
 package com.itheima.reggie.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.reggie.common.R;
 import com.itheima.reggie.dto.DishDto;
 import com.itheima.reggie.service.DishService;
@@ -30,9 +31,9 @@ public class DishController {
      * @return
      */
     @GetMapping("/page")
-    public R<Object> dishPageList(@RequestParam("page") Integer page,
-                                  @RequestParam("pageSize") Integer pageSize,
-                                  @RequestParam(value = "name", required = false)String name) {//todo
+    public R<Page<DishDto>> dishPageList(@RequestParam("page") Integer page,
+                                @RequestParam("pageSize") Integer pageSize,
+                                @RequestParam(value = "name", required = false) String name) {
         return R.success(dishService.dishPageList(page, pageSize, name));
     }
 
@@ -42,8 +43,8 @@ public class DishController {
      * @return
      */
     @GetMapping("/{id}")
-    public R<Object> getDishById(@PathVariable("id") Long id) {//todo
-        return R.success(dishService.getById(id));
+    public R<Object> getDishById(@PathVariable("id") String id) {
+        return R.success(dishService.getDishByIdWithFlavor(id));
     }
 
     /**
@@ -52,7 +53,7 @@ public class DishController {
      * @return
      */
     @DeleteMapping
-    public R<Object> deleteDish(@RequestParam("ids") String ids) {//todo
+    public R<Object> deleteDish(@RequestParam("ids") String ids) {
         String[] idsArr = ids.split(",");
         return R.success(dishService.removeByIds(Collections.singletonList(idsArr)));
     }
@@ -60,40 +61,25 @@ public class DishController {
     /**
      * 批量删除/批量启用/删除/启用
      * @param status 状态
-     * @param ids 菜品id，可用,分割
+     * @param ids 菜品id，可用","分割
      * @return
      */
     @PostMapping("/status/{status}")
     public R<Object> updateDishStatus(@PathVariable("status") Integer status,
-                                      @RequestParam("ids") String ids) {//todo
+                                      @RequestParam("ids") String ids) {
         return R.success(dishService.updateDishStatus(status, ids));
     }
 
 
 
     /**
-     * [新增保存菜品信息]{
-     *     "name": "我是菜品名称",
-     *     "price": 999000,
-     *     "code": "",
-     *     "image": "b81c6947-9ac2-44e1-b481-e0ea5fa559da.png",
-     *     "description": "我是添加菜品测试",
-     *     "status": 1,
-     *     "categoryId": "1847227623393320961",
-     *     "flavors": [
-     *         {
-     *             "name": "甜味",
-     *             "value": "[\"无糖\",\"少糖\",\"半糖\",\"多糖\",\"全糖\"]",
-     *             "showOption": false
-     *         }
-     *     ]
-     * }
+     * 新增保存菜品信息
      * @param dto 菜品&口味信息
      * @return
      */
     @PostMapping
-    public R<Object> saveDish(@RequestBody DishDto dto) {//todo
-        return R.success(dishService.saveDishInfos(dto));
+    public R<Object> saveDish(@RequestBody DishDto dto) {
+        return R.success(dishService.saveWithFlavor(dto));
     }
 
 }

@@ -5,6 +5,7 @@ import com.itheima.reggie.config.FileConfig;
 import com.itheima.reggie.enums.BizExceptionEnum;
 import com.itheima.reggie.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -120,8 +121,12 @@ public class FileCommonController {
      * @param name 文件名
      * @return 二进制
      */
-    @PostMapping("/access")
-    public void download(String name, HttpServletResponse response){
+    @GetMapping("/access")
+    public void access(String name, HttpServletResponse response){
+
+        if (StringUtils.isBlank(name)){
+            return;
+        }
 
         try (FileInputStream fileInputStream = new FileInputStream(new File(fileConfig.getBasePath() + name));){
             //输入流，通过输入流读取文件内容
@@ -146,5 +151,17 @@ public class FileCommonController {
             e.printStackTrace();
         }
 
+    }
+
+    @DeleteMapping("/delete")
+    public R<String> handleFileDelete(@RequestParam("filename") String filename) {
+        Path filePath = uploadDir.resolve(filename);
+        try {
+            Files.deleteIfExists(filePath);
+            return R.success("文件删除成功");
+        } catch (IOException e) {
+            // 可以记录日志或抛出异常
+            return R.error("文件删除失败");
+        }
     }
 }

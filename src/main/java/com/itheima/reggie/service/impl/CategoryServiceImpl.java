@@ -85,8 +85,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override
     public List<Category> getCategoryList(Category category) {
         LambdaQueryWrapper<Category> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(Category::getType, category.getType());
+        // 查询条件
+        wrapper.eq(category.getType() != null, Category::getType, category.getType());
         wrapper.eq(Category::getIsDeleted, DeleteField.ACTITVE.getValue());
+
+        // 排序
         wrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
         return this.list(wrapper);
     }

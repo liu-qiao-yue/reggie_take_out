@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.reggie.mapper.ConfigurationMapper">
+
+    <resultMap id="BaseResultMap" type="com.itheima.reggie.entity.Configuration">
+        <id property="id" column="id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="isDeleted" column="is_deleted"/>
+
+        <collection property="children" javaType="java.util.ArrayList"
+                    column="{parentId=id}" select="com.itheima.reggie.mapper.ConfigurationMapper.selectChildren"
+                    ofType="com.itheima.reggie.entity.Configuration">
+        </collection>
+    </resultMap>
+
+    <select id="selectConfigurationWithConfiguration" resultMap="BaseResultMap" parameterType="com.itheima.reggie.entity.Configuration">
+        SELECT
+            c.*
+        FROM
+            configuration AS c
+        WHERE
+            c.parent_id IS NULL
+            <if test="configuration.name != '' and configuration.name != null">
+                AND c.`name` LIKE CONCAT('%',#{configuration.name},'%')
+            </if>
+            <if test="configuration.type != '' and configuration.type != null">
+                AND c.type = #{configuration.type}
+            </if>
+        ORDER BY c.update_time DESC
+    </select>
+
+    <select id="selectChildren" resultType="com.itheima.reggie.entity.Configuration">
+        SELECT * FROM configuration WHERE parent_id = #{parentId}
+    </select>
+
+</mapper>
+

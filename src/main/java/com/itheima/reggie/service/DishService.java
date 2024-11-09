@@ -23,7 +23,7 @@ public interface DishService extends IService<Dish> {
      * @param name
      * @return
      */
-    Page<Dish> dishPageList(Integer page, Integer pageSize, String name);
+    Page<DishDto> dishPageList(Integer page, Integer pageSize, String name);
 
     /**
      * 更新菜品状态
@@ -38,5 +38,12 @@ public interface DishService extends IService<Dish> {
      * @param dto
      * @return
      */
-    boolean saveDishInfos(DishDto dto);
+    boolean saveWithFlavor(com.itheima.reggie.dto.DishDto dto);
+
+    /**
+     * 根据ID查询菜品
+     * @param id
+     * @return
+     */
+    DishDto getDishByIdWithFlavor(String id);
 }

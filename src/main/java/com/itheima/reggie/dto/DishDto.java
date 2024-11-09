@@ -9,21 +9,6 @@ import java.util.List;
 
 
 /**
- *  添加菜品功能前端请求参数示例：
- *      "name": "我是菜品名称",
- *      "price": 999000,
- *      "code": "",
- *      "image": "b81c6947-9ac2-44e1-b481-e0ea5fa559da.png",
- *      "description": "我是添加菜品测试",
- *      "status": 1,
- *      "categoryId": "1847227623393320961",
- *      "flavors": [
- *          {
- *              "name": "甜味",
- *              "value": "[\"无糖\",\"少糖\",\"半糖\",\"多糖\",\"全糖\"]",
- *              "showOption": false
- *          }
- *      ]
  * @author ellie
  */
 @Data

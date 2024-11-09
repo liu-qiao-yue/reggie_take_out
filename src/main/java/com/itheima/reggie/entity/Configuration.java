@@ -1,48 +1,33 @@
 package com.itheima.reggie.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- 菜品
- * @author ellie
- */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Dish implements Serializable {
+@TableName("configuration")
+public class Configuration {
 
-    private static final long serialVersionUID = 1L;
-
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     private String name;
 
-    private Long categoryId;
+    private String type;
 
-    private BigDecimal price;
+    private Long parentId;
 
-    private String code;
-
-    private String image;
-
-    private String description;
-
-    /**
-     * 0 停售 1 起售
-     */
-    private Integer status;
-
-    private Integer sort;
+    @TableField(exist = false)
+    private List<Configuration> children = new ArrayList<>();
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
@@ -56,9 +41,5 @@ public class Dish implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
 
-    /**
-     * 是否删除
-     */
     private Integer isDeleted;
-
 }
