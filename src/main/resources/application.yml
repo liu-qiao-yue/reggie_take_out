@@ -12,21 +12,21 @@ spring:
       password: 123456
 # mybatis-plus配置
 mybatis-plus:
+  mapperLocations: classpath*:/com/itheima/reggie/mapper/*.xml
   configuration:
     #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
   global-config:
     db-config:
       id-type: ASSIGN_ID
 # 日志配置
 logging:
   level:
-    org:
-      apache:
-        ibatis: DEBUG
+    org.apache.ibatis: DEBUG
+#    com.itheima.reggie.mapper: DEBUG
+#    com.baomidou.mybatisplus: DEBUG
 # 文件上传配置
 file:
   basePath: D:/uploads/  # 图片存储路径，可自行定义
 
-test: 1

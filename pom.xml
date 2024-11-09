@@ -41,6 +41,12 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.4.2</version>
         </dependency>
+        <!-- MyBatis-Plus 的开源增强工具 -->
+        <dependency>
+            <groupId>com.github.yulichang</groupId>
+            <artifactId>mybatis-plus-join-boot-starter</artifactId>
+            <version>1.4.11</version>
+        </dependency>
 <!--    Lombok库，通过自动生成样板代码（如getter、setter、构造函数等），简化了Java类的开发-->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -104,11 +110,30 @@
     </dependencies>
     <!--       Maven的构建配置段落，用于配置构建过程中使用的插件，这个插件是Spring Boot项目的关键组成部分，确保项目可以正常构建和运行-->
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.4.5</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <!--修改版本-->
+                <version>3.1.0</version>
             </plugin>
         </plugins>
     </build>
