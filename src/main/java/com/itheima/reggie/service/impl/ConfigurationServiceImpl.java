@@ -37,8 +37,10 @@ public class ConfigurationServiceImpl extends MPJBaseServiceImpl<ConfigurationMa
     public Boolean saveOrUpdateConfiguration(Configuration configuration) {
         this.saveOrUpdate(configuration);
 
+        configuration.getChildren().forEach(child -> child.setParentId(configuration.getId()));
+
         // insert children
-        this.saveBatch(configuration.getChildren());
+        this.saveBatch( configuration.getChildren());
 
         return true;
     }

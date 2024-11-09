@@ -17,7 +17,7 @@ import java.util.List;
 @TableName("configuration")
 public class Configuration {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "id",type = IdType.ASSIGN_ID)
     private Long id;
 
     private String name;
