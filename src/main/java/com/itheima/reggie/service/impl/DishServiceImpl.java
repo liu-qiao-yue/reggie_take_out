@@ -60,7 +60,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
      * @param page     第几页
      * @param pageSize 每页显示条数
      * @param name     菜品名称
-     * @return
+     * @return Page
      */
     @Override
     public Page<DishDto> dishPageList(Integer page, Integer pageSize, String name) {
@@ -87,7 +87,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
      *
      * @param status 状态
      * @param ids    菜品id，可用,分割
-     * @return
+     * @return boolean
      */
     @Override
     public boolean updateDishStatus(Integer status, String ids) {
@@ -110,8 +110,8 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     /**
      * 新增菜品，同时保存对应的口味数据
      *
-     * @param dto
-     * @return
+     * @param dto 表单信息
+     * @return boolean
      */
     @Override
     @Transactional
@@ -147,8 +147,8 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     /**
      * 根据id查询菜品信息和对应的口味信息
      *
-     * @param id
-     * @return
+     * @param id id
+     * @return DishDto
      */
     @Override
     public DishDto getDishByIdWithFlavor(String id) {
@@ -164,8 +164,8 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
 
     /**
      * 根据分类id查询菜品列表
-     * @param dish
-     * @return
+     * @param dish 查询条件
+     * @return List
      */
     @Override
     public List<DishDto> getCategoryList(Dish dish) {

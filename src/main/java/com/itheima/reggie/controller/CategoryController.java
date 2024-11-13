@@ -26,8 +26,8 @@ public class CategoryController {
 
     /**
      * 新增菜品/套餐分类
-     * @param category
-     * @return
+     * @param category 表单信息
+     * @return Boolean
      */
     @PostMapping
     public R<Boolean> addCategory(@RequestBody Category category) {
@@ -38,7 +38,7 @@ public class CategoryController {
      * 分类分页查询
      * @param page 第几行
      * @param pageSize 每页几行
-     * @return
+     * @return Page
      */
     @GetMapping("/page")
     public R<Page<Category>> categoryPageList(@RequestParam("page") Integer page, @RequestParam("pageSize") Integer pageSize){
@@ -47,8 +47,8 @@ public class CategoryController {
 
     /**
      * 修改菜品/套餐分类
-     * @param category
-     * @return
+     * @param category 表单信息
+     * @return Boolean
      */
     @PutMapping
     public R<Boolean> updateCategory(@RequestBody Category category) {
@@ -57,8 +57,8 @@ public class CategoryController {
 
     /**
      * 删除菜品/套餐分类
-     * @param ids
-     * @return
+     * @param ids IDs
+     * @return Boolean
      */
     @DeleteMapping
     public R<Boolean> deleteCategory(Long ids) {
@@ -68,7 +68,7 @@ public class CategoryController {
     /**
      * 获取菜品/套餐分类列表by type
      * @param category 1:菜品分类 2:套餐分类
-     * @return
+     * @return List
      */
     @GetMapping("/list")
     public R<List<Category>> getCategoryList(Category category) {
