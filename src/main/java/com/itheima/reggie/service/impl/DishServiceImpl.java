@@ -20,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import static com.itheima.reggie.enums.DeleteField.ACTITVE;
+import static com.itheima.reggie.enums.DeleteField.DELECTED;
 
 /**
  * @author ellie
@@ -71,7 +73,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
                 // 将 Category 表中的 name 映射到 DishDto 中的 categoryName
                 .selectAs(Category::getName, DishDto::getCategoryName)
                 .leftJoin(Category.class, Category::getId, Dish::getCategoryId)
-                .eq(StringUtils.isNotBlank(name), Dish::getName, name)
+                .like(StringUtils.isNotBlank(name), Dish::getName, name)
                 .eq(Dish::getIsDeleted, ACTITVE.getValue())
                 .orderByDesc(Dish::getUpdateTime);
         // 进行分页查询
@@ -91,9 +93,16 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     public boolean updateDishStatus(Integer status, String ids) {
         String[] idsArr = ids.split(",");
         List<Dish> dishes = new ArrayList<>();
-        Arrays.stream(idsArr).forEach(id ->
-                dishes.add(Dish.builder().id(Long.parseLong(id)).status(status).build())
-        );
+        Arrays.stream(idsArr).forEach(id -> {
+            Dish.DishBuilder builder = Dish.builder().id(Long.parseLong(id));
+            // 0 停售 1 起售 2 删除
+            if (status != 2) {
+                builder.status(status);
+            } else {
+                builder.isDeleted(DELECTED.getValue());
+            }
+            dishes.add(builder.build());
+        });
         return this.updateBatchById(dishes);
 
     }
@@ -107,7 +116,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     @Override
     @Transactional
     public boolean saveWithFlavor(DishDto dto) {
-        if (dto.getId() == null){
+        if (dto.getId() == null) {
             // 新增菜品，状态默认为1
             dto.setStatus(1);
             dto.setCode("");
@@ -119,12 +128,12 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
             List<DishFlavor> flavors = dto.getFlavors();
             flavors.forEach(flavor -> flavor.setDishId(id));
             dishFlavorService.saveBatch(flavors);
-        }else {
+        } else {
             this.updateById(dto);
             // 删除口味数据
             //清理当前菜品对应口味数据---dish_flavor表的delete操作（无论口味有没有发生修改，直接删除之前的重新插入）
             LambdaQueryWrapper<DishFlavor> queryWrapper = Wrappers.lambdaQuery();
-            queryWrapper.eq(DishFlavor::getDishId,dto.getId());
+            queryWrapper.eq(DishFlavor::getDishId, dto.getId());
             dishFlavorService.remove(queryWrapper);
 
             //添加当前提交过来的口味数据---dish_flavor表的insert操作
@@ -137,6 +146,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
 
     /**
      * 根据id查询菜品信息和对应的口味信息
+     *
      * @param id
      * @return
      */
@@ -145,11 +155,29 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
         MPJLambdaWrapper<Dish> dishWrapper = new MPJLambdaWrapper<Dish>()
                 .selectAll(Dish.class)
                 .selectCollection(DishFlavor.class, DishDto::getFlavors)
-                .leftJoin(DishFlavor.class, DishFlavor::getDishId, Dish::getId)
+                .leftJoin(DishFlavor.class, on -> on.eq(DishFlavor::getDishId, Dish::getId).eq(DishFlavor::getIsDeleted, ACTITVE.getValue()))
                 .eq(Dish::getId, id)
-                .eq(Dish::getIsDeleted, ACTITVE.getValue())
-                .eq(DishFlavor::getIsDeleted, ACTITVE.getValue());
+                .eq(Dish::getIsDeleted, ACTITVE.getValue());
 
         return dishMapper.selectJoinOne(DishDto.class, dishWrapper);
+    }
+
+    /**
+     * 根据分类id查询菜品列表
+     * @param dish
+     * @return
+     */
+    @Override
+    public List<DishDto> getCategoryList(Dish dish) {
+        MPJLambdaWrapper<Dish> dishWrapper = new MPJLambdaWrapper<Dish>()
+                .selectAll(Dish.class)
+                .selectCollection(DishFlavor.class, DishDto::getFlavors)
+                .leftJoin(DishFlavor.class, on -> on.eq(DishFlavor::getDishId, Dish::getId).eq(DishFlavor::getIsDeleted, ACTITVE.getValue()))
+                .eq(dish.getCategoryId() != null, Dish::getCategoryId, dish.getCategoryId())
+                .eq(Dish::getStatus, 1)
+                .eq(Dish::getIsDeleted, ACTITVE.getValue())
+                .orderByAsc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
+
+        return dishMapper.selectJoinList(DishDto.class, dishWrapper);
     }
 }

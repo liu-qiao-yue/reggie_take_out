@@ -3,11 +3,13 @@ package com.itheima.reggie.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.reggie.common.R;
 import com.itheima.reggie.dto.DishDto;
+import com.itheima.reggie.entity.Dish;
 import com.itheima.reggie.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author ellie
@@ -55,7 +57,7 @@ public class DishController {
     @DeleteMapping
     public R<Object> deleteDish(@RequestParam("ids") String ids) {
         String[] idsArr = ids.split(",");
-        return R.success(dishService.removeByIds(Collections.singletonList(idsArr)));
+        return R.success(dishService.removeByIds(Arrays.asList(idsArr)));
     }
 
     /**
@@ -80,6 +82,12 @@ public class DishController {
     @PostMapping
     public R<Object> saveDish(@RequestBody DishDto dto) {
         return R.success(dishService.saveWithFlavor(dto));
+    }
+
+
+    @GetMapping("/list")
+    public R<List<DishDto>> list(Dish dish){
+        return R.success(dishService.getCategoryList(dish));
     }
 
 }

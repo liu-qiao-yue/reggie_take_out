@@ -2,6 +2,7 @@ package com.itheima.reggie.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.itheima.reggie.dto.SetmealDto;
 import com.itheima.reggie.entity.Setmeal;
 
 /**
@@ -23,5 +24,28 @@ public interface SetmealService extends IService<Setmeal> {
      * @param name
      * @return
      */
-    Page<Setmeal> setmealPageList(Integer page, Integer pageSize, String name);
+    Page<SetmealDto> setmealPageList(Integer page, Integer pageSize, String name);
+
+
+    /**
+     * 更新套餐状态
+     * @param status
+     * @param ids
+     * @return
+     */
+    boolean updateStatus(Integer status, String ids);
+
+    /**
+     * 新增套餐
+     * @param setmealDto
+     * @return
+     */
+    boolean saveWithDishes(SetmealDto setmealDto);
+
+    /**
+     * 根据套餐ID获取套餐信息
+     * @param id
+     * @return
+     */
+    SetmealDto getSetmealByIdWithDishes(String id);
 }

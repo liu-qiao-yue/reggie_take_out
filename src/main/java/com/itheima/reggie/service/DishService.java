@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.itheima.reggie.dto.DishDto;
 import com.itheima.reggie.entity.Dish;
 
+import java.util.List;
+
 /**
  * @author ellie
  */
@@ -46,4 +48,6 @@ public interface DishService extends IService<Dish> {
      * @return
      */
     DishDto getDishByIdWithFlavor(String id);
+
+    List<DishDto> getCategoryList(Dish dish);
 }
