@@ -28,7 +28,7 @@ import java.util.List;
 @Service
 public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService {
 
-    public static final String SESSION_KEY = "employee";
+    public static final String SESSION_EMPLOYEE_KEY = "employee";
 
     /**
      *  策略模式：密码修改
@@ -63,7 +63,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         }
 
         //存入session
-        request.getSession().setAttribute(SESSION_KEY, emp.getId());
+        request.getSession().setAttribute(SESSION_EMPLOYEE_KEY, emp.getId());
         return emp;
     }
 
@@ -76,7 +76,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     @Override
     public String logout(HttpServletRequest request) {
         //清除session
-        request.getSession().removeAttribute(SESSION_KEY);
+        request.getSession().removeAttribute(SESSION_EMPLOYEE_KEY);
         return "Logged out.";
     }
 

@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.itheima.reggie.service.impl.EmployeeServiceImpl.SESSION_KEY;
+import static com.itheima.reggie.service.impl.EmployeeServiceImpl.SESSION_EMPLOYEE_KEY;
+import static com.itheima.reggie.service.impl.UserServiceImpl.SESSION_USER_KEY;
 
 /**
  * 检查用户是否已经完成登录
@@ -54,7 +55,9 @@ public class LoginCheckFilter implements Filter {
                 "/employee/login",
                 "/employee/logout",
                 "/backend/**",
-                "/front/**"
+                "/front/**",
+                "/user/sendMsg",
+                "/user/login"
         };
         //2.2 本次url是否在urls里面。
         boolean match = checkUrl(requestUrl, urls);
@@ -66,8 +69,16 @@ public class LoginCheckFilter implements Filter {
         }
 
         //4. 判断登录状态，已登录直接放行
-        if (request.getSession().getAttribute(SESSION_KEY) != null){
-            Long id = (Long) request.getSession().getAttribute(SESSION_KEY);
+        if (request.getSession().getAttribute(SESSION_EMPLOYEE_KEY) != null){
+            Long id = (Long) request.getSession().getAttribute(SESSION_EMPLOYEE_KEY);
+            RequestContextHolder.setCurrentId(id);
+            //已登录直接放行
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (request.getSession().getAttribute(SESSION_USER_KEY) != null){
+            Long id = (Long) request.getSession().getAttribute(SESSION_USER_KEY);
             RequestContextHolder.setCurrentId(id);
             //已登录直接放行
             filterChain.doFilter(request, response);

@@ -24,8 +24,8 @@ mybatis-plus:
 logging:
   level:
     org.apache.ibatis: DEBUG
-#    com.itheima.reggie.mapper: DEBUG
-#    com.baomidou.mybatisplus: DEBUG
+    com.itheima.reggie.mapper: DEBUG
+    com.baomidou.mybatisplus: DEBUG
 # 文件上传配置
 file:
   basePath: D:/uploads/  # 图片存储路径，可自行定义

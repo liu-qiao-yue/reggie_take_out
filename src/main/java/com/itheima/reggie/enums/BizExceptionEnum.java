@@ -13,6 +13,8 @@ public enum BizExceptionEnum {
     USERNAME_ERROR(100001, "The userName is not find."),
     PASSWORD_ERROR(100001, "The password is wrong."),
     ACCOUNT_FORBIDDEN(100002, "The account has been banned from use."),
+
+    VALIDATE_CODE_ERROR(100003, "Only 4-digit or 6-digit verification codes can be generated."),
     //通用模块
     UPDATE_ERROR(100003, "update error."),
     INPUT_ERROR(100004, "input error."),
