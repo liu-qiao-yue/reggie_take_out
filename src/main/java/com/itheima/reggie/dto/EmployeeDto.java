@@ -2,6 +2,7 @@ package com.itheima.reggie.dto;
 
 import com.itheima.reggie.entity.Employee;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
  * @author ellie
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class EmployeeDto extends Employee  implements Serializable {
     private String oldPassword;
     /**

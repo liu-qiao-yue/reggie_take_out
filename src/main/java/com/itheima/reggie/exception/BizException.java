@@ -2,11 +2,13 @@ package com.itheima.reggie.exception;
 
 import com.itheima.reggie.enums.BizExceptionEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author ellie
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class BizException extends RuntimeException {
 
     /**

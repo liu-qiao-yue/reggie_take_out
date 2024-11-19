@@ -48,7 +48,7 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
     public int getCountByCategoryId(Long categoryId) {
         LambdaQueryWrapper<Setmeal> dishWrapper = Wrappers.lambdaQuery();
         dishWrapper.eq(Setmeal::getCategoryId, categoryId);
-        return this.count(dishWrapper);
+        return (int) this.count(dishWrapper);
     }
 
     /**

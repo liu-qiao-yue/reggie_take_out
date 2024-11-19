@@ -27,7 +27,7 @@ public class ForgotPasswordImpl extends AbstractUpdatePasswordServiceImpl {
         wrapper.eq(Employee::getUsername, employeeDto.getUsername());
         wrapper.eq(Employee::getIdNumber, employeeDto.getIdNumber());
 
-        Integer count = super.employeeMapper.selectCount(wrapper);
+        Long count = super.employeeMapper.selectCount(wrapper);
 
         if (count != 1) {
             throw new BizException(BizExceptionEnum.USERNAME_ERROR);

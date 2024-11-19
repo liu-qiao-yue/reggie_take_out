@@ -51,7 +51,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     public int getCountByCategoryId(Long categoryId) {
         LambdaQueryWrapper<Dish> dishWrapper = Wrappers.lambdaQuery();
         dishWrapper.eq(Dish::getCategoryId, categoryId);
-        return this.count(dishWrapper);
+        return (int) this.count(dishWrapper);
     }
 
     /**

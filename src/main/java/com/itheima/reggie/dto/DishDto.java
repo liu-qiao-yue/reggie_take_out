@@ -3,6 +3,7 @@ package com.itheima.reggie.dto;
 import com.itheima.reggie.entity.Dish;
 import com.itheima.reggie.entity.DishFlavor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  * @author ellie
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class DishDto extends Dish {//继承了Dish，即为该对象拥有了Dish的所有属性
 
     /**
