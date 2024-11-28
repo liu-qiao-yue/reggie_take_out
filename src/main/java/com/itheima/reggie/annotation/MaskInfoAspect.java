@@ -58,8 +58,8 @@ public class MaskInfoAspect {
             maskData(data);
             try {
                 Field dataField = r.getClass().getDeclaredField("data");
-                dataField.setAccessible(true);
-                dataField.set(r, data);
+                dataField.setAccessible(true);//NOSONAR
+                dataField.set(r, data);//NOSONAR
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new MaskException(e.getMessage());
             }
@@ -133,7 +133,7 @@ public class MaskInfoAspect {
     }
 
     private Object maskMap(Map<?, ?> map) {
-        Map<Object, Object> newMap = new HashMap<>(map.size());
+        Map<Object, Object> newMap = new HashMap<>();
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             Object key = entry.getKey();
             Object value = entry.getValue();

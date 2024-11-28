@@ -65,24 +65,4 @@ public class Orders implements Serializable {
      * 备注
      */
     private String remark;
-
-//    /**
-//     * 用户名
-//     */
-//    private String userName;
-//
-//    /**
-//     * 手机号
-//     */
-//    private String phone;
-//
-//    /**
-//     * 地址
-//     */
-//    private String address;
-//
-//    /**
-//     * 收货人
-//     */
-//    private String consignee;
 }

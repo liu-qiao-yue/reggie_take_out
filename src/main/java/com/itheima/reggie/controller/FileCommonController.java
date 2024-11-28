@@ -53,6 +53,10 @@ public class FileCommonController {
     public R<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
         //获取原始文件名。假设原始文件名：abc.jpg
         String originalFilename = file.getOriginalFilename();
+        // 检查文件名是否为空
+        if (originalFilename == null) {
+            throw new BizException(BizExceptionEnum.INVALID_FILE_NAME);
+        }
         //截取文件名后缀，从最后一个点的位置开始截取(包含点)，截取到结尾的字符串
         String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
 
