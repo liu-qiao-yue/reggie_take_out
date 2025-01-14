@@ -30,3 +30,7 @@ logging:
 file:
   basePath: D:/uploads/  # 图片存储路径，可自行定义
 
+es:
+  serverUrl: 127.0.0.1:9200
+  username: elastic
+  password: 123456

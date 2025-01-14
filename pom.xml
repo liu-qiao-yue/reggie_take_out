@@ -101,6 +101,15 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+        <!-- 引用elasticsearch -->
+        <dependency>
+            <groupId>co.elastic.clients</groupId>
+            <artifactId>elasticsearch-java</artifactId>
+            <version>8.17.0</version>
+        </dependency>
+
+
+
     </dependencies>
     <build>
         <resources>
